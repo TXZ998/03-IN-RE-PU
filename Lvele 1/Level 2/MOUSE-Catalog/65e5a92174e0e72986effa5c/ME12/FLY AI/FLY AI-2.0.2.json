@@ -117,7 +117,7 @@
             },
             "application/xml": {
               "schema": {
-                "$ref": "#/components/schemas/CreateMenuResource"
+                "$ref": "https://xapihub.io/models/KITTY UI ORG/MOUSE Catalog/OpenAPI3/1.0.0/#/components/SCHEMAS/IdentifierResource"
               }
             },
             "application/x-www-form-urlencoded": {
@@ -149,7 +149,7 @@
             "description": "Bad request",
             "headers": {
               "h1": {
-                "$ref": "https://xapihub.io/models/KITTY UI ORG/MOUSE Catalog/OpenAPI3/1.0.0/#/components/HEADERS/location"
+                "$ref": "https://xapihub.io/models/KITTY UI ORG/MOUSE Catalog/OpenAPI3/1.0.0/#/components/version 2.0.2ERS/location"
               }
             },
             "links": {
