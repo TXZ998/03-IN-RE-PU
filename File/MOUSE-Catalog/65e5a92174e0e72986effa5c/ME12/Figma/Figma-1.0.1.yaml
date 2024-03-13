@@ -112,7 +112,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateMenuResource"
+                "$ref": "https://xapihub.io/models/KITTY UI ORG/MOUSE Catalog/OpenAPI3/1.0.0/#/components/SCHEMAS/OrderCountPerMenuResource"
               }
             },
             "application/xml": {
