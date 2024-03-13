@@ -12,7 +12,7 @@
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "version": "1.0.89"
+    "version": "1.0.70"
   },
   "externalDocs": {
     "description": "Find out more about XApi",
@@ -22,6 +22,10 @@
     {
       "url": "https://api-qa.xapihub.io/coffeeshop/v1",
       "description": "Coffeeshop Server"
+    }
+    {
+      "url": "https://api-dev.xapihub.io/coffeeshop/v1",
+      "description": "Coffeeshop Server2"
     }
   ],
   "tags": [
