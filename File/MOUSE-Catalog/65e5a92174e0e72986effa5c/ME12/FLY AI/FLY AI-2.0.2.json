@@ -153,42 +153,14 @@
             },
             "application/xml": {
               "schema": {
-                "type": "object",
-                "allOf": [
-                  {
-                    "type": "object",
-                    "required": [
-                      "name"
-                    ],
-                    "properties": {
-                      "name": {
-                        "type": "string",
-                        "example": "today special"
-                      },
-                      "description": {
-                        "type": "string",
-                        "example": "Sample menu"
-                      },
-                      "isAvailable": {
-                        "type": "boolean",
-                        "example": true
-                      }
-                    }
-                  },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "items": {
-                        "type": "array",
-                        "items": {
-                          "type": "string",
-                          "format": "uuid",
-                          "example": "e2b0a51e-262e-11ee-be56-0242ac120002"
-                        }
-                      }
-                    }
+                "type": " object",
+                "properties": {
+                  "id": {
+                    "type": " string",
+                    "format": " uuid",
+                    "example": " 189e6756-1a68-11ee-be56-0242ac120002"
                   }
-                ]
+                }
               }
             },
             "application/x-www-form-urlencoded": {
@@ -280,14 +252,7 @@
           },
           "400": {
             "description": "Bad request",
-            "headers": {
-              "h1": {
-                "description": " URL of created resource",
-                "schema": {
-                  "type": " object"
-                }
-              }
-            },
+            "headers": {},
             "links": {
               "l1": {
                 "operationId": " getUserByName",
