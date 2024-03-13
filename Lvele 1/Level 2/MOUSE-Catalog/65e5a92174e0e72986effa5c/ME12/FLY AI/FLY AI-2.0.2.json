@@ -112,7 +112,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateMenuResource"
+                "$ref": "https://xapihub.io/models/KITTY UI ORG/MOUSE Catalog/OpenAPI3/1.0.0/#/components/SCHEMAS/CreateMenuResource"
               }
             },
             "application/xml": {
@@ -128,6 +128,11 @@
           },
           "required": true
         },
+        "callbacks": {
+          "c1": {
+            "$ref": "https://xapihub.io/models/KITTY UI ORG/MOUSE Catalog/OpenAPI3/1.0.0/#/components/CALLBACKS/myEvent"
+          }
+        },
         "responses": {
           "201": {
             "description": "created",
@@ -141,7 +146,17 @@
             }
           },
           "400": {
-            "description": "Bad request"
+            "description": "Bad request",
+            "headers": {
+              "h1": {
+                "$ref": "https://xapihub.io/models/KITTY UI ORG/MOUSE Catalog/OpenAPI3/1.0.0/#/components/HEADERS/location"
+              }
+            },
+            "links": {
+              "l1": {
+                "$ref": "https://xapihub.io/models/KITTY UI ORG/MOUSE Catalog/OpenAPI3/1.0.0/#/components/LINKS/getStore"
+              }
+            }
           },
           "401": {
             "description": "Unauthorized (authentication not done)",
@@ -154,14 +169,7 @@
             "content": {}
           },
           "422": {
-            "description": "Un-processable Entity (request well-formed but has business errors, check error section.)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
+            "$ref": "https://xapihub.io/models/KITTY UI ORG/MOUSE Catalog/OpenAPI3/1.0.0/#/components/RESPONSES/res1"
           }
         }
       },
@@ -174,13 +182,7 @@
         "operationId": "findMenus",
         "parameters": [
           {
-            "name": "name",
-            "in": "query",
-            "description": "Name of the menu",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "$ref": "https://xapihub.io/models/KITTY UI ORG/MOUSE Catalog/OpenAPI3/1.0.0/#/components/PARAMETERS/NM"
           },
           {
             "name": "itemName",
@@ -1002,6 +1004,11 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/CreateUserResource"
+              },
+              "examples": {
+                "ex1": {
+                  "$ref": "https://xapihub.io/models/KITTY UI ORG/MOUSE Catalog/OpenAPI3/1.0.0/#/components/EXAMPLES/User1"
+                }
               }
             },
             "application/xml": {
