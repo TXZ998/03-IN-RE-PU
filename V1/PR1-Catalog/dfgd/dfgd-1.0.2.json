@@ -1,28 +1,55 @@
 openapi: 3.1.0
 info:
-  title: dfgd.json
-  description: This is a sample API
-  termsOfService: http://xapihub.io
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 1.0.2sfgsgd
-externalDocs:
-  description: Find out more about Xapi
-  url: http://xapihub.io
-security: []
-servers: []
-tags: []
-paths: {}
-webhooks: {}
+  title: defaultTitle
+  description: defaultDescription
+  version: "0.1"
+servers:
+  - url: https://aspm-poc.cfapps.eu10.hana.ondemand.com
+paths:
+  /services/api/v1/equipment(6111AA0E1C654AA3A33C1009A8D9F313)/values:
+    get:
+      description: Auto generated using Swagger Inspector
+      parameters:
+        - name: status
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+          example: "1"
+      responses:
+        "200":
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_200"
+              examples:
+                "0":
+                  value: '{"id":"6111AA0E1C654AA3A33C1009A8D9F313","internalId":"10007320","templates":[]}'
+      servers:
+        - url: https://aspm-poc.cfapps.eu10.hana.ondemand.com
+    servers:
+      - url: https://aspm-poc.cfapps.eu10.hana.ondemand.com
 components:
-  schemas: {}
-  parameters: {}
-  links: {}
-  responses: {}
-  headers: {}
-  requestBodies: {}
-  callbacks: {}
-  pathItems: {}
-  examples: {}
-  securitySchemes: {}
+  schemas:
+    inline_response_200:
+      type: object
+      properties:
+        internalId:
+          type: string
+        templates:
+          type: array
+          items:
+            type: string
+        id:
+          type: string
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: http://yourauthurl.com
+          scopes:
+            scope_name: Enter your scopes here
