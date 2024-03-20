@@ -2,9 +2,9 @@ openapi: 3.1.0
 info:
   title: defaultTitle
   description: defaultDescription
-  version: "0.1"
+  version: "1.0.1"
 servers:
-  - url: https://aspm-poc.cfapps.eu10.hana.ondemand.com
+  - url: https://asdfsdfpoc.cfapps.eudsff10.hana.ondemand.com
 paths:
   /services/api/v1/equipment(6111AA0E1C654AA3A33C1009A8D9F313)/values:
     get:
