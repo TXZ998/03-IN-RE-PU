@@ -1,7 +1,7 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "User Management API- version 1.0.3 part4353453",
+    "title": "User Management API- version 1.0.3 ,
     "description": "The User Management API is a RESTful API service that deals with any account management for \nthe Blackjack application. The service stores account information and manages login/logout,\nregistration, updating account information, etc. The microservice will also create and manage \nUserIDs and will verify if a UserID exists in the user database.\n\n**Features**\n- **User Management**: Allows a user to create, modify, view, and delete a account associated with the Blackjack application.\n- **Authentication**: Allows the service to verify that a given UserID is a valid UserID.\n\n\n**Use Cases**\n- **User login/logout**: A user would like to login to an existing user account or logout of said account if the user is already logged in.\n- **User registration**: A user would like to create an account for the Blackjack application.\n- **User account deletion**: A user would like to remove their account from the Blackjack application. This assumes the user is logged in.\n- **Update user email**: A user would like to update the email associated with their account. This assumes the user is logged in.\n- **Update user password**: A user would like to update their password associated with their account. This assumes the user is logged in.\n- **Show user information**: A user would like to see what their email and password are for their account. This assumes the user is logged in.",
     "version": "1.0.3"
   },
