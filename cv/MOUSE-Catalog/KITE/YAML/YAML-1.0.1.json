@@ -1,0 +1,292 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "User Management API- version 1.0.3 part4353453",
+    "description": "The User Management API is a RESTful API service that deals with any account management for \nthe Blackjack application. The service stores account information and manages login/logout,\nregistration, updating account information, etc. The microservice will also create and manage \nUserIDs and will verify if a UserID exists in the user database.\n\n**Features**\n- **User Management**: Allows a user to create, modify, view, and delete a account associated with the Blackjack application.\n- **Authentication**: Allows the service to verify that a given UserID is a valid UserID.\n\n\n**Use Cases**\n- **User login/logout**: A user would like to login to an existing user account or logout of said account if the user is already logged in.\n- **User registration**: A user would like to create an account for the Blackjack application.\n- **User account deletion**: A user would like to remove their account from the Blackjack application. This assumes the user is logged in.\n- **Update user email**: A user would like to update the email associated with their account. This assumes the user is logged in.\n- **Update user password**: A user would like to update their password associated with their account. This assumes the user is logged in.\n- **Show user information**: A user would like to see what their email and password are for their account. This assumes the user is logged in.",
+    "version": "1.0.3"
+  },
+  "servers": [
+    {
+      "description": "SwaggerHub API Auto Mocking",
+      "url": "https://virtserver.swaggerhub.com/rrozander/UserManagementAPI/1.0.0"
+    },
+    {
+      "url": "https://blackjackusermanagementservice.azurewebsites.net/",
+      "description": "Host server for the microservice"
+    },
+    {
+      "url": "http://localhost:3000/",
+      "description": "Local host server for local testing"
+    }
+  ],
+  "tags": [
+    {
+      "name": "user"
+    },
+    {
+      "name": "verify"
+    }
+  ],
+  "paths": {
+    "/user/login": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Logs user into application",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The user has successfully logged in",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userID": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The user gave incorrect credentials."
+          }
+        }
+      }
+    },
+    "/user/logout/{UserID}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Logs the user out of application",
+        "parameters": [
+          {
+            "name": "UserID",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the user to return.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The user has successfully logged out"
+          },
+          "400": {
+            "description": "Could not log the user out"
+          }
+        }
+      }
+    },
+    "/user/register": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Creates new user in application",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The user has successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userID": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Registration unsuccessful"
+          }
+        }
+      }
+    },
+    "/user/{UserID}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns user by UserID",
+        "parameters": [
+          {
+            "name": "UserID",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the user to return.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User has been found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userID": {
+                      "type": "integer"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "password": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Could not find the user"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Update the user's information",
+        "parameters": [
+          {
+            "name": "UserID",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the user to return.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "To keep the email/password the same, set their value to empty string (\"\") in request body.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User's information has been updated successfully"
+          },
+          "400": {
+            "description": "Could not update user's information"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Deletes user by UserID",
+        "parameters": [
+          {
+            "name": "UserID",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the user to return.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted the user"
+          },
+          "400": {
+            "description": "Could not delete the user"
+          }
+        }
+      }
+    },
+    "/verify/{UserID}": {
+      "get": {
+        "tags": [
+          "verify"
+        ],
+        "summary": "Verifies UserID is valid user",
+        "parameters": [
+          {
+            "name": "UserID",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the user to return.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "UserID is valid"
+          },
+          "400": {
+            "description": "UserID is not valid"
+          }
+        }
+      }
+    }
+  }
+}
