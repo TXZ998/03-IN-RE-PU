@@ -7,7 +7,7 @@
   ],
   "info": {
     "contact": {
-      "email": "abc@bbc.co.uk",
+      "email": "abcd@bbc.co.uk",
       "name": "Open Nitro Project",
       "url": "http://developer.bbc.co.uk/"
     },
@@ -18,7 +18,7 @@
     },
     "termsOfService": "http://www.bbc.co.uk/terms/",
     "title": "BBC Nitro API",
-    "version": "9.08",
+    "version": "9.0.89",
     "x-apiClientRegistration": {
       "url": "https://developer.bbc.co.uk/user/register"
     },
