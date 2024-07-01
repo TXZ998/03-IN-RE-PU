@@ -1,0 +1,842 @@
+---
+openapi: 3.1.0
+
+info:
+  title: a19APIs
+  description: "<h3>API Description</h3>\n<p>Allows you to search and retrieve flight/truck details from Conservation.</p>\n\
+    \n<h3>API Identity Card</h3>\n\
+    <p>Click the below links to view a business description for each API.</p>
+   <a href=\"https://developer.Conservation.aero/csp-create-transport-means-v1-identity\"> 
+Conservation Create Operational Flight/Trucks</a><br>    
+   <a href=\"https://developer.Conservation.aero/csp-search-transport-means-v1-identity\"> 
+Conservation Search Operational Flight/Trucks</a><br>
+   <a href=\"https://developer.Conservation.aero/csp-retrieve-transport-means-details-v1-identity\"> 
+Conservation Retrieve Operational Flight/Truck Details</a><br>
+   <a href=\"https://developer.Conservation.aero/csp-update-transport-means-v1-identity\"> 
+Conservation Update Operational Flight/Trucks</a><br>
+<h3>API Reference Guide</h3>
+<p>Click the below links to view usage examples and implementation details for each API.</p>
+   <a href=\"https://developer.Conservation.aero/csp-create-transport-means-v1-reference\"> 
+Conservation Create Operational Flight/Trucks</a><br>
+   <a href=\"https://developer.Conservation.aero/csp-search-transport-means-v1-reference\"> 
+Conservation Search Operational Flight/Trucks</a><br>
+   <a href=\"https://developer.Conservation.aero/csp-retrieve-transport-means-details-v1-reference\"> 
+Conservation Retrieve Operational Flight/Truck Details</a><br>
+   <a href=\"https://developer.Conservation.aero/csp-update-transport-means-v1-reference\"> 
+Conservation Update Operational Flight/Trucks</a><br>"
+  termsOfService: https://developer.Conservation.aero/terms
+  contact:
+    name: C
+    email: api.g@ero
+  version: v1
+  
+servers:
+- url: https://api-aero/csp/transport-means/v1
+
+security:
+- ApiKeyAuth: []
+- ApiKeyAuth: []
+  BearerAuth: []
+  
+tags:
+- name: transport-means-controller
+  description: Allows to manage flight/truck details.
+  
+paths:
+  /transport-means/:
+    post:
+      tags:
+        - transport-means-controller
+      summary: Create an operational flight/truck.
+      operationId: createTransportMeans
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransportMeans'
+        required: true
+      responses:
+        201:
+          description: Created
+          headers:
+            location:
+              description: URL of the created flight resource. A unique Conservation internal ID for this parts (E.g. 6567989) will be appended (at the end) to the path URL. This path URL (including ID) can be used to retrieve the full flight information.
+              schema:
+                type: string
+                example: https://api-gateway.Conservation.aero/csp/transport-means/v1/transport-means/6567989
+          content: {}
+        400:
+          description: Bad Request (Invalid syntax)
+          content:
+            application/json:
+              schema:
+                $ref: 'https://xapihub.io/models/BTS/V Catalog/M3/Regression 7/v1/#/components/SCHEMAS/SyntaxErrorResponse'   
+        401:
+          description: Unauthorized (Authentication not done)
+          content:
+            application/json:
+              schema:
+                $ref: 'https://xapihub.io/models/BTS/V Catalog/M3/Regression 7/v1/#/components/SCHEMAS/FaultResponse'
+        403:
+          description: Forbidden (No access rights to the content)
+          content: {}
+        409:
+          description: Conflict (Similar record exists - identified by identifier object) 
+          content: {}            
+        422:
+          description: Un-processable Entity (Semantic error)
+          content:
+            application/json:
+              schema:
+                $ref: 'https://xapihub.io/models/BTS/V Catalog/M3/Regression 7/v1/#/components/SCHEMAS/ErrorResponse'
+        429:
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: 'https://xapihub.io/models/BTS/V Catalog/M3/Regression 7/v1/#/components/SCHEMAS/QuotaViolationResponse' 
+  /transport-means/search:
+    post:
+      tags:
+        - transport-means-controller
+      summary: Search flights/trucks.
+      operationId: searchTransportMeans
+      parameters:
+        - $ref: 'https://xapihub.io/models/BTS/V Catalog/M3/Regression 7/v1/#/components/PARAMETERS/page'
+        - $ref: 'https://xapihub.io/models/BTS/V Catalog/M3/Regression 7/v1/#/components/PARAMETERS/size'    
+        - $ref: 'https://xapihub.io/models/BTS/V Catalog/M3/Regression 7/v1/#/components/PARAMETERS/sort'         
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchCriteria'
+        required: true
+      responses:
+        200:
+          description: OK1
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedResourcesTransportMeans'
+        400:
+          description: Bad Request (Invalid syntax)
+          content:
+            application/json:
+              schema:
+                $ref: 'https://xapihub.io/models/BTS/V Catalog/M3/Regression 7/v1/#/components/SCHEMAS/SyntaxErrorResponse'
+        401:
+          description: Unauthorized (Authentication not done)
+          content:
+            application/json:
+              schema:
+                $ref: 'https://xapihub.io/models/BTS/V Catalog/M3/Regression 7/v1/#/components/SCHEMAS/FaultResponse' 
+        403:
+          description: Forbidden (No access rights to the content)
+          content: {}
+        422:
+          description: Un-processable Entity (Semantic error)
+          content:
+            application/json:
+              schema:
+                $ref: 'https://xapihub.io/models/BTS/V Catalog/M3/Regression 7/v1/#/components/SCHEMAS/ErrorResponse' 
+        429:
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: 'https://xapihub.io/models/BTS/V Catalog/M3/Regression 7/v1/#/components/SCHEMAS/QuotaViolationResponse'                 
+  /transport-means/{id}:
+    get:
+      tags:
+      - transport-means-controller
+      summary: Retrieve details for a specific operational flight/truck.
+      operationId: retrieveTransportMeansById
+      parameters:
+      - name: id
+        in: path
+        description: Unique Conservation internal ID (technical id) for this flight/truck.
+        required: true
+        schema:
+          type: string
+          example: 6567989
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransportMeansResource'
+        400:
+          description: Bad Request (Invalid syntax)
+          content:
+            application/json:
+              schema:
+                $ref: 'https://xapihub.io/models/BTS/V Catalog/M3/Regression 7/v1/#/components/SCHEMAS/SyntaxErrorResponse'   
+        401:
+          description: Unauthorized (Authentication not done)
+          content:
+            application/json:
+              schema:
+                $ref: 'https://xapihub.io/models/BTS/V Catalog/M3/Regression 7/v1/#/components/SCHEMAS/FaultResponse'
+        403:
+          description: Forbidden (No access rights to the content)
+          content: {}
+        404:
+          description: Not Found 
+          content: {}            
+        429:
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: 'https://xapihub.io/models/BTS/V Catalog/M3/Regression 7/v1/#/components/SCHEMAS/QuotaViolationResponse' 
+    put:
+      tags:
+        - transport-means-controller
+      summary: Update an operational flight/truck details.
+      operationId: updateTransportMeans
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Unique Conservation internal ID (technical id) for this flight/truck.
+          schema:
+            type: string
+            example: 6567989
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatedTransportMeans'
+        required: true
+      responses:
+        204:
+          description: No Content (Successful)
+          content: {}
+        400:
+          description: Bad Request (Invalid syntax)
+          content:
+            application/json:
+              schema:
+                $ref: 'https://xapihub.io/models/BTS/V Catalog/M3/Regression 7/v1/#/components/SCHEMAS/SyntaxErrorResponse'   
+        401:
+          description: Unauthorized (Authentication not done)
+          content:
+            application/json:
+              schema:
+                $ref: 'https://xapihub.io/models/BTS/V Catalog/M3/Regression 7/v1/#/components/SCHEMAS/FaultResponse'  
+        403:
+          description: Forbidden (No access rights to the content)
+          content: {}
+        422:
+          description: Un-processable Entity (Semantic error)
+          content:
+            application/json:
+              schema:
+                $ref: 'https://xapihub.io/models/BTS/V Catalog/M3/Regression 7/v1/#/components/SCHEMAS/ErrorResponse'
+        429:
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: 'https://xapihub.io/models/BTS/V Catalog/M3/Regression 7/v1/#/components/SCHEMAS/QuotaViolationResponse'
+components:
+  schemas:
+    LegDetails:
+      type: object
+      properties:
+        departureAirport:
+          $ref: 'Location'
+        arrivalAirport:
+          $ref: 'https://api.swaggerhub.com/domains/Conservation-Cargo-Systems/cargospot-components/v1#/components/schemas/Location'
+        scheduledArrival:
+          type: string
+          format: date-time
+          description: Scheduled time of arrival of the flight leg (STA) in UTC as per ISO8601 format.
+          example: '2021-09-06T08:55:13.439Z'
+        scheduledDeparture:
+          type: string
+          format: date-time
+          description: Scheduled time of departure of the flight leg (STD) in UTC as per ISO8601 format.
+          example: '2021-09-06T07:30:13.439Z'
+        estimatedArrival:
+          type: string
+          format: date-time
+          description: Estimated time of arrival of the flight leg (ETA) in UTC as per ISO8601 format.
+          example: '2021-09-06T08:55:13.439Z'
+        estimatedDeparture:
+          type: string
+          format: date-time
+          description: Estimated time of departure of the flight leg (ETD) in UTC as per ISO8601 format.
+          example: '2021-09-06T07:30:13.439Z'
+        actualArrival:
+          type: string
+          format: date-time
+          description: Actual time of arrival of the flight leg (ATA) in UTC as per ISO8601 format.
+          example: '2021-09-06T08:55:13.439Z'
+        actualDeparture:
+          type: string
+          format: date-time
+          description: Actual time of departure of the flight leg (ATD) in UTC as per ISO8601 format.
+          example: '2021-09-06T07:30:13.439Z'
+        fbls:
+          type: integer
+          format: int32
+          description: Number of FBL messages received.
+          example: 1
+        status:
+          type: string
+          enum:
+            - Assigned
+            - Blocked
+            - ASN-Closed
+            - Closed
+            - Delayed
+            - Departed
+            - X-Cancel
+          description: Status of the flight leg.
+          example: Closed
+        vehicleType:
+          type: string
+          description: Aircraft or Truck type code.
+          example: 777
+        registration:
+          type: string
+          description: Offical registration of the aircraft or truck.
+          example: XS3XT01C    
+        maximumWeight:
+          $ref: 'https://api.swaggerhub.com/domains/Conservation-Cargo-Systems/cargospot-components/v1#/components/schemas/WeightWithUnit'   
+        maximumVolume:
+          $ref: 'https://api.swaggerhub.com/domains/Conservation-Cargo-Systems/cargospot-components/v1#/components/schemas/VolumeWithUnit'   
+        mailWeight:
+          $ref: 'https://api.swaggerhub.com/domains/Conservation-Cargo-Systems/cargospot-components/v1#/components/schemas/MailWeightWithUnit'
+    TruckingInfo:
+      type: object
+      properties:
+        accountNumber:
+          type: string
+          description: Account Number of the trucking company operating the schedule. This will be available for specific airlines based on ini configuration.
+          example: 21009541
+        currency:
+          type: string
+          description: Currency code.
+          example: GBP
+        calculateCostFlatRate:
+          type: number
+          format: float
+          description: A truck can be ordered by a GSA for a fixed flat charge. If entered in this field, the system will break-down the costs on each AWB booked on this truck.
+          example: 5
+        minimumHandlingCost:
+          type: number
+          format: float
+          description: Additional minimum handling costs.
+          example: 50    
+        truckCode:
+          type: string
+          description: The code of the trucking company for which the trucking costs apply shall be entered.
+          example: PLA
+        truckType:
+          type: string
+          description: A 3 letter code to define the type of the truck.
+          example: PLN          
+    Identifier:
+      type: object
+      required:
+        - carrierCode
+        - number
+        - date
+      properties:
+        carrierCode:
+          type: string
+          description: Coded identification approved by IATA for a carrier, linked to the flight/truck.
+          example: XS
+        number:
+          type: string
+          description: Reference number for this flight/truck. Format - nnn(n)(a).
+          example: 515A
+        date:
+          type: string
+          description: Reference date for this flight/truck. Format - YYYY-MM-DD.
+          format: date
+          example: 2021-09-06
+    TransportMeans:
+      type: object
+      required:
+        - booking
+        - category
+        - defaultVehicleType
+        - identifier
+        - legs
+      properties:
+        autoFBR:
+          type: boolean
+          description: Auto FBR. Indicates whether an automatic sending of an FBR message for this flight is activated or not. True indicates it is activated, false is not activated. The system will send FBR message to the flight carrier at predefined intervals to receive the FBL (booking list) in return.
+          example: true      
+        booking:
+          $ref: '#/components/schemas/BookingConfiguration'  
+        category:
+          type: string
+          enum:
+            - Freighter
+            - Passenger
+            - Truck
+          description: Category of the flight/truck. Possible values include Passenger, Freighter, Truck (case insensitive).
+          example: Passenger  
+        defaultRegistration:
+          type: string
+          description: Offical registration of the aircraft or truck.
+          example: XS3XT01C
+        defaultVehicleType:
+          type: string
+          description: Aircraft or Truck type code.
+          example: 777       
+        identifier:
+          $ref: '#/components/schemas/Identifier'
+        legs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Leg'
+        market:
+          type: string
+          enum:
+            - Domestic
+            - International
+          description: Intended geographical market for the flight capacity. This parameter is available based on the configuration in Conservation. Possible values are Domestic  OR International (case insensitive).
+          example: International
+        possibleULDTypes:
+          type: string
+          description: Possible ULD types captured as free text information. 
+          example: AVE,AKE,AW2,PAG,P1P,PMC
+        remarks:
+          type: string
+          description: Remarks.
+          example: Flight specific remarks
+        serviceTypeCode:
+          type: string
+          description: Service type code. Possible values include F,T and P. ServiceType should be existing in Conservation master data.
+          example: F
+        truckingInformation:
+          $ref: '#/components/schemas/TruckingInfo'          
+    BookingConfiguration:
+      type: object
+      required: 
+        - autoConfirm
+      properties:
+        autoConfirm:
+          type: boolean
+          description: Allows users without specific duty codes (privilege) to confirm bookings on this flight in Conservation.
+          example: true
+        autoConfirmFFRVolume:
+          type: number
+          format: float          
+          description: A booking made by means of the C-IMP Booking Message (FFR) or Conservation Booking API will get an automatic confirmation with status HK, KK, CA in case the volume is not exceeding the volume limitation entered in this field.
+          example: 1            
+        autoConfirmFFRWeight:
+          type: number
+          format: float          
+          description: A booking made by means of the C-IMP Booking Message (FFR) or Conservation Booking API will get an automatic confirmation with status HK, KK, CA in case the weight is not exceeding the weight limitation entered in this field.
+          example: 100
+        autoConfirmVolume:
+          type: number
+          format: float          
+          description: Maximum volume for which any booking (in free sale) will receive an automatic confirmation (status KK).
+          example: 1          
+        autoConfirmWeight:
+          type: number
+          format: float          
+          description: Maximum weight for which any booking (in free sale) will receive an automatic confirmation (status KK).
+          example: 100
+        maximumFFRPercentage:
+          type: integer
+          format: int32    
+          description: Maximum percentage allowed for overbooking in case of bookings received via C-IMP Booking Message (FFR) or Conservation Booking API. Any booking made between 100 percent and the percentage entered in this field will be handled according to the weight and volume limitations set in the FFR Weight & Volume (autoConfirmFFRWeight & autoConfirmFFRVolume) fields.          
+          example: 5           
+        maximumSalePercentage:
+          type: integer
+          format: int32
+          description: Maximum percentage allowed for overbooking in case of bookings made via Conservation. Any booking made between 100 percent and the percentage entered in this field will be handled according to the weight and volume limitations set in the overbooking weight & volume (overbookingWeight & overbookingVolume) fields.          
+          example: 5
+        overbookingVolume:
+          type: number
+          format: float          
+          description: Maximum volume for a booking that will receive an automatic confirmation (status HK,KK, CA) in case of overbooking. Overbooking = Booking made over the available weight & volume. 
+          example: 1          
+        overbookingWeight:
+          type: number
+          format: float          
+          description: Maximum weight for a booking that will receive an automatic confirmation (status HK, KK, CA) in case of overbooking. Overbooking = Booking made over the available weight & volume. 
+          example: 100
+    Leg:
+      required:
+        - actualArrival
+        - actualDeparture
+        - arrivalAirportCode
+        - departureAirportCode
+      type: object
+      properties:
+        actualArrival:
+          type: string
+          format: date-time          
+          description: Actual time of arrival of the flight leg (ATA) in UTC as per ISO8601 format. **scheduled arrival should  replace this, and API should support local time format, conversion should happen based on the origin and destination.
+          example: '2019-11-04T15:22:18.327Z'
+        actualDeparture:
+          type: string
+          format: date-time          
+          description: Actual time of departure of the flight leg (ATD) in UTC as per ISO8601 format. **scheduled departure should get replace this, and API should support local time format, conversion should happen based on the origin and destination.
+          example: '2019-11-04T15:22:18.327Z'
+        arrivalAirportCode:
+          type: string
+          description: 3 letter airport code.
+          example: LHR          
+        departureAirportCode:
+          type: string
+          description: 3 letter airport code.
+          example: LUX          
+        mailWeight:
+          type: number
+          format: float
+          description: Mail Weight for the flight leg.
+          example: 100            
+        maximumWeight:
+          type: number
+          format: float
+          description: Maximum allowed weight to be onloaded for this leg.
+          example: 1000
+        maximumVolume:
+          type: number
+          format: float
+          description: Maximum allowed volume to be onloaded for this leg.
+          example: 1000
+        registration:
+          type: string
+          description: Offical registration of the aircraft or truck.
+          example: XS3XT01C
+        status:
+          type: string
+          description: Status of the flight leg. Possible values include ASN-Closed, Blocked, Closed, Delayed, Departed, or X-Cancel.
+          example: Delayed
+        vehicleType:
+          type: string
+          description:  Aircraft or Truck type code.     
+          example: 777
+    Note:
+      type: object
+      description: Note will be returned only in retrieve operational flight/truck details API. In search it will be empty.
+      properties:
+        stationCode:
+          type: string
+          description: Station linked to the Conservation user who created the note.
+          example: LHR
+        remark:
+          type: string
+          description: Remarks.
+          example: Station remarks
+        user:
+          description: Conservation user that created the note.
+          type: string
+          example: CSPUser01
+        createdOn:
+          description: Timestamp (in UTC) of when the note was created.
+          type: string
+          format: date
+          example: '2021-09-01T10:55:13.439Z'    
+    SearchCriteria:
+      type: object
+      properties:
+        flightOriginCodes:
+          type: array
+          items:
+            type: string
+            description: Origin code is the 3-letter-IATA code of the airport/city.
+            example: LHR
+        flightDestinationCodes:
+          type: array
+          items:
+            type: string
+            description: Destination code is the 3-letter-IATA code of the airport/city.
+            example: MAN           
+        carrierCodes:
+          type: array
+          items:
+            type: string
+            description: Coded identification approved by IATA for a carrier, linked to the flight/truck.
+            example: XS      
+        flightNumbers:
+          type: array
+          items:
+            type: string
+            description: Reference number for flight/truck. Format- nnn(n)(a).
+            example: '515A'            
+        flightDate:
+          type: string
+          format: date
+          description: From date for the search period. Format is YYYY-MM-DD. If flightDate alone is passed flights from this date will be retrieved.
+          example: '2021-09-13'   
+        untilFlightDate:
+          type: string
+          format: date
+          description: To date for the search period. Format is YYYY-MM-DD. Retrieves flights with in the flightDate-untilFlightDate search range.
+          example: '2021-09-30'             
+        aircraftTypes:
+          type: array
+          items:
+            type: string
+            description: Aircraft type code.
+            example: 777            
+        categories:
+          type: array
+          items:
+            type: string
+            enum:
+              - Passenger
+              - Freighter
+              - Truck
+            description: Category of the flight/truck.
+            example: Truck
+        registrations:
+          type: array
+          items:
+            type: string
+            description: Offical registration of the aircraft or truck.
+            example: XSB3XTN01            
+    Segment:
+      type: object
+      description: Segments will be returned only in retrieve operational flight/truck details API. In search it will be empty.
+      properties:
+        origin:
+          $ref: 'https://api.swaggerhub.com/domains/Conservation-Cargo-Systems/cargospot-components/v1#/components/schemas/Location'
+        destination:
+          $ref: 'https://api.swaggerhub.com/domains/Conservation-Cargo-Systems/cargospot-components/v1#/components/schemas/Location'
+    PagedResourcesTransportMeans:
+      type: object
+      properties:
+        flights:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransportMeansResource'
+        _links:
+          $ref: 'https://api.swaggerhub.com/domains/Conservation-Cargo-Systems/APIGatewayComponents/v1#/components/schemas/PageLinksWithoutExportLink'
+        page:
+          $ref: 'https://api.swaggerhub.com/domains/Conservation-Cargo-Systems/APIGatewayComponents/v1#/components/schemas/Pages'     
+    TransportMeansIdentifier:
+      type: object
+      properties:
+        carrierCode:
+          type: string
+          description: Coded identification approved by IATA for a carrier, linked to the flight/truck.
+          example: XS
+        number:
+          type: string
+          description: Reference number for this flight/truck. Format - nnn(n)(a).
+          example: 515A
+        date:
+          type: string
+          description: Reference date for this flight/truck. Format - YYYY-MM-DD.
+          format: date
+          example: '2021-09-06'
+    TransportMeansResource:
+      type: object
+      properties:
+        autoFBR:
+          type: boolean
+          description: Auto FBR. Indicates whether an automatic sending of an FBR message for this flight is activated or not. True indicates it is activated, false is not activated. The system will send FBR message to the flight carrier at predefined intervals to receive the FBL (booking list) in return.
+          example: true    
+        booking:
+          $ref: 'https://api.swaggerhub.com/domains/Conservation-Cargo-Systems/cargospot-components/v1#/components/schemas/TransportMeansBookingConfiguration'
+        businessKey:
+          type: string
+          description: Unique Conservation internal ID for the operational flight.
+          example: 994719
+        category:
+          type: string
+          description: Category of the flight/truck. Values include Passenger, Freighter or Truck.
+          example: Passenger  
+        defaultRegistration:
+          type: string
+          description: Offical registration of the aircraft or truck.
+          example: XS3XT01C
+        defaultVehicleType:
+          type: string
+          description: Aircraft or Truck type code.
+          example: 777
+        flags:
+          type: string
+          description: Indicator for presence of specific data for the flight/truck. Possible values include F - No auto FBR, N - Notes, M - Waiting. This parameter will be returned only in Retrieve Operational Flight/Truck Details API, not in search API.
+          example: N          
+        flightScheduleSequence:
+          type: integer
+          format: int32
+          description: Unique Conservation internal ID for the associated flight schedule.
+          example: 6913
+        identifier:
+          $ref: '#/components/schemas/TransportMeansIdentifier'
+        legs:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegDetails'
+        market:
+          type: string
+          enum:
+            - International
+            - Domestic
+          description: Intended geographical market for the flight capacity. This parameter is available based on the configuration in Conservation.
+          example: Domestic
+        notes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Note'  
+        possibleULDTypes:
+          type: string
+          description: Possible ULD types captured as free text information.  
+          example: 'AVE,AKE,AW2,PAG,P1P,PMC'
+        remarks:
+          type: string
+          description: Remarks.
+          example: Flight specific remarks          
+        serviceType:
+          $ref: 'https://api.swaggerhub.com/domains/Conservation-Cargo-Systems/cargospot-components/v1#/components/schemas/ServiceType'
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Segment'
+        truckingInformation:
+          $ref: '#/components/schemas/TruckingInfo'
+        _links:
+          $ref: 'https://api.swaggerhub.com/domains/Conservation-Cargo-Systems/APIGatewayComponents/v1#/components/schemas/SelfLink'     
+    UpdatedTransportMeans:
+      type: object
+      required:
+        - booking
+        - category
+        - defaultVehicleType
+        - identifier
+        - legs      
+      properties:
+        autoFBR:
+          type: boolean
+          description: Auto FBR. Indicates whether an automatic sending of an FBR message for this flight is activated or not. True indicates it is activated, false is not activated. The system will send FBR message to the flight carrier at predefined intervals to receive the FBL (booking list) in return.
+          example: true      
+        booking:
+          $ref: '#/components/schemas/BookingConfiguration'       
+        category:
+          type: string
+          enum:
+            - Freighter
+            - Passenger
+            - Truck
+          description: Category of the flight/truck. Possible values include Passenger, Freighter, Truck (case insensitive).
+          example: Passenger  
+        defaultRegistration:
+          type: string
+          description: Offical registration of the aircraft or truck.
+          example: XS3XT01C
+        defaultVehicleType:
+          type: string
+          description: Aircraft or Truck type code.
+          example: 777    
+        legs:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdatedLeg'          
+        market:
+          type: string
+          enum:
+            - Domestic
+            - International
+          description: Intended geographical market for the flight capacity. This parameter is available based on the configuration in Conservation. Possible values are Domestic  OR International (case insensitive).
+          example: International
+        possibleULDTypes:
+          type: string
+          description: Possible ULD types captured as free text information. 
+          example: AVE,AKE,AW2,PAG,P1P,PMC
+        remarks:
+          type: string
+          description: Remarks.
+          example: Flight specific remarks
+        serviceTypeCode:
+          type: string
+          description: Service type code. Possible values include F,T and P. ServiceType should be existing in Conservation master data.
+          example: F
+        truckingInformation:
+          $ref: '#/components/schemas/TruckingInfo'   
+    UpdatedLeg:
+      required:
+        - actualArrival
+        - actualDeparture
+        - arrivalAirportCode
+        - departureAirportCode
+      type: object
+      properties:
+        actualArrival:
+          type: string
+          format: date-time          
+          description: Actual time of arrival of the flight leg (ATA) in UTC as per ISO8601 format. ***scheduled arrival should  replace this, and API should support local time format, conversion should happen based on the origin and destination.
+          example: '2019-11-04T15:22:18.327Z'
+        actualDeparture:
+          type: string
+          format: date-time          
+          description: Actual time of departure of the flight leg (ATD) in UTC as per ISO8601 format. ***scheduled departure should get replace this, and API should support local time format, conversion should happen based on the origin and destination.
+          example: '2019-11-04T15:22:18.327Z'
+        arrivalAirportCode:
+          type: string
+          description: 3 letter airport code.
+          example: LHR          
+        departureAirportCode:
+          type: string
+          description: 3 letter airport code.
+          example: LUX    
+        estimatedArrival:
+          type: string
+          format: date-time          
+          description: Estimated time of arrival of the flight leg (ETA) in UTC as per ISO8601 format.
+          example: '2019-11-04T15:22:18.327Z'
+        estimatedDeparture:
+          type: string
+          format: date-time          
+          description: Estimated time of departure of the flight leg (ETD) in UTC as per ISO8601 format.
+          example: '2019-11-04T15:22:18.327Z'          
+        mailWeight:
+          type: number
+          format: float
+          description: Mail Weight for the leg
+          example: 100            
+        maximumWeight:
+          type: number
+          format: float
+          description: Maximum allowed weight to be onloaded for this leg.
+          example: 1000
+        maximumVolume:
+          type: number
+          format: float
+          description: Maximum allowed volume to be onloaded for this leg.
+          example: 1000
+        registration:
+          type: string
+          description: Offical registration of the aircraft or truck.
+          example: XS3XT01C
+        scheduledArrival:
+          type: string
+          format: date-time          
+          description: Scheduled time of arrival of the flight leg (STA) in UTC as per ISO8601 format.
+          example: '2019-11-04T15:22:18.327Z'
+        scheduledDeparture:
+          type: string
+          format: date-time          
+          description: Scheduled time of departure of the flight leg (STD) in UTC as per ISO8601 format.
+          example: '2019-11-04T15:22:18.327Z'          
+        status:
+          type: string
+          description: Status of the flight leg. Possible values include ASN-CLOSED, BLOCKED, CLOSED, DELAYED OR X-CANCEL.
+          example: DELAYED
+        vehicleType:
+          type: string
+          description:  Aircraft or Truck type code.     
+          example: 777    
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: apikey
+      in: header
+    BearerAuth:
+      type: http
+      scheme: bearer
