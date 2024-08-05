@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   version: v1
-  title: Airport CRUD API
+  title: Pull New
   description: API to create, read, update and delete the airport and tabs
   termsOfService: https://developer.champ.aero/terms
   contact:
