@@ -1,0 +1,1059 @@
+openapi: 3.1.0
+info:
+  version: v1
+  title: Airport CRUD API
+  description: API to create, read, update and delete the airport and tabs
+  termsOfService: https://developer.champ.aero/terms
+  contact:
+    email: api.gateway@champ.aero
+    name: CHAMP Cargosystems
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/CHAMP-Cargo-Systems/airport-OCP-CSP/v1
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/CHAMP-Cargo-Systems/AirportFacilitiesAPI/v1
+  - url: https://api.champ.aero/csp/master-data/v2/airports
+security:
+  - ApiKeyAuth: []
+  - ApiKeyAuth: []
+    BearerAuth: []
+tags:
+  - name: airport-controller
+    description: Create, read, update and delete airport and tabs
+paths:
+  /airports:
+    post:
+      tags:
+        - airport-controller
+      summary: Create airport and tabs
+      operationId: create
+      description: API to create airport and tabs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewAirport"
+        description: Airport request parameter
+        required: true
+      responses:
+        "201":
+          description: Created
+          content: {}
+        "400":
+          description: Invalid parameter/value
+          content: {}
+        "401":
+          description: Unauthorized (Authentication not done)
+          content: {}
+        "403":
+          description: Forbidden (No access rights to the content)
+          content: {}
+        "404":
+          description: Not found
+          content: {}
+        "409":
+          description: Airport exist
+          content: {}
+        "412":
+          description: Precondition Failed
+          content: {}
+        "422":
+          description: Unprocessable Entity (Semantic error)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  "/airports/{code}":
+    get:
+      tags:
+        - airport-controller
+      summary: Get airport and tabs
+      operationId: get
+      description: API to get airport and tabs
+      parameters:
+        - name: code
+          in: path
+          description: Airport code to get airport and tabs
+          required: true
+          schema:
+            type: string
+            examples: LHR
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AirportResponse"
+        "400":
+          description: Invalid parameter/value
+          content: {}
+        "401":
+          description: Unauthorized (Authentication not done)
+          content: {}
+        "403":
+          description: Forbidden (No access rights to the content)
+          content: {}
+        "404":
+          description: Not found
+          content: {}
+        "412":
+          description: Precondition Failed
+          content: {}
+        "422":
+          description: Unprocessable Entity (Semantic error)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "429":
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fault:
+                    type: object
+                    properties:
+                      faultstring:
+                        type: string
+                        example: Rate limit quota violation. Quota limit exceeded.
+                      detail:
+                        type: object
+                        properties:
+                          errorcode:
+                            type: string
+                            example: policies.ratelimit.QuotaViolation
+    put:
+      tags:
+        - airport-controller
+      summary: Update airport and tabs
+      operationId: update
+      description: API to update airport and tabs
+      parameters:
+        - name: code
+          in: path
+          description: Airport code to update airport and tabs
+          required: true
+          schema:
+            type: string
+            examples: LHR
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateAirport"
+        required: true
+      responses:
+        "204":
+          description: No Content
+          content: {}
+        "400":
+          description: Invalid parameter/value
+          content: {}
+        "401":
+          description: Unauthorized (Authentication not done)
+          content: {}
+        "403":
+          description: Forbidden (No access rights to the content)
+          content: {}
+        "404":
+          description: Not found
+          content: {}
+        "412":
+          description: Precondition Failed
+          content: {}
+        "422":
+          description: Unprocessable Entity (Semantic error)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      tags:
+        - airport-controller
+      summary: Delete airport and tabs
+      operationId: delete
+      description: API to delete airport and tabs
+      parameters:
+        - name: code
+          in: path
+          description: Airport code to delete airport and tabs
+          required: true
+          schema:
+            type: string
+            examples: LHR
+      responses:
+        "204":
+          description: No Content
+          content: {}
+        "400":
+          description: Invalid parameter/value
+          content: {}
+        "401":
+          description: Unauthorized (Authentication not done)
+          content: {}
+        "403":
+          description: Forbidden (No access rights to the content)
+          content: {}
+        "404":
+          description: Not found
+          content: {}
+        "412":
+          description: Precondition Failed
+          content: {}
+        "422":
+          description: Unprocessable Entity (Semantic error)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    NewAirport:
+      $ref: "#/components/schemas/Airport"
+    UpdateAirport:
+      $ref: "#/components/schemas/Airport"
+    Airport:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Airport code
+        name:
+          type: string
+          description: Airport name
+        countryCode:
+          type: string
+          description: Airport country code
+        timeArea:
+          type: string
+          description: Airport area time
+        defaultConnectTime:
+          type: string
+          description: Default connect time
+        euSpecialTerritory:
+          type: string
+          description: EU special territory
+        salesRegionCode:
+          type: string
+          description: Sales region code
+        salesRegion2Code:
+          type: string
+          description: Sales region code 2
+        cityCode:
+          type: string
+          description: City code
+        stateCode:
+          type: string
+          description: State code
+        groupCode:
+          type: string
+          description: Group code
+        eawbReady:
+          type: string
+          description: EAWB ready
+        autoECC:
+          type: string
+          description: Autp ECC
+        collectCarrierCode:
+          type: string
+          description: Collect carrier code
+        transferCarrierCode:
+          type: string
+          description: Transfer carrier code
+        alternateFlightPlanProcedure:
+          type: string
+          description: Alternate flight plan process
+        alternateWeatherInfoProc:
+          type: string
+          description: Alternate weather information process
+        remarks:
+          type: string
+          description: Remarks
+        exportRestrictions:
+          type: string
+          description: Export restrictions
+        importRestrictions:
+          type: string
+          description: Import restrictions
+        transitRestrictions:
+          type: string
+          description: Transit restrictions
+        aircraft:
+          $ref: "#/components/schemas/Aircraft"
+        cargo:
+          $ref: "#/components/schemas/Cargo"
+        apron:
+          $ref: "#/components/schemas/Apron"
+        facility:
+          $ref: "#/components/schemas/Facility"
+        miscellaneous:
+          $ref: "#/components/schemas/Miscellaneous"
+        handling:
+          $ref: "#/components/schemas/Handling"
+    AirportResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Airport id
+        code:
+          type: string
+          description: Airport code
+        name:
+          type: string
+          description: Airport name
+        countryCode:
+          type: string
+          description: Airport country code
+        timeArea:
+          type: string
+          description: Airport area time
+        defaultConnectTime:
+          type: string
+          description: Default connect time
+        euSpecialTerritory:
+          type: string
+          description: EU special territory
+        salesRegionCode:
+          type: string
+          description: Sales region code
+        salesRegion2Code:
+          type: string
+          description: Sales region code 2
+        cityCode:
+          type: string
+          description: City code
+        stateCode:
+          type: string
+          description: State code
+        groupCode:
+          type: string
+          description: Group code
+        eawbReady:
+          type: string
+          description: EAWB ready
+        autoECC:
+          type: string
+          description: Autp ECC
+        collectCarrierCode:
+          type: string
+          description: Collect carrier code
+        transferCarrierCode:
+          type: string
+          description: Transfer carrier code
+        alternateFlightPlanProcedure:
+          type: string
+          description: Alternate flight plan process
+        alternateWeatherInfoProc:
+          type: string
+          description: Alternate weather information process
+        remarks:
+          type: string
+          description: Remarks
+        exportRestrictions:
+          type: string
+          description: Export restrictions
+        importRestrictions:
+          type: string
+          description: Import restrictions
+        transitRestrictions:
+          type: string
+          description: Transit restrictions
+        aircraft:
+          $ref: "#/components/schemas/Aircraft"
+        cargo:
+          $ref: "#/components/schemas/Cargo"
+        apron:
+          $ref: "#/components/schemas/Apron"
+        facility:
+          $ref: "#/components/schemas/Facility"
+        miscellaneous:
+          $ref: "#/components/schemas/Miscellaneous"
+        handling:
+          $ref: "#/components/schemas/Handling"
+    Aircraft:
+      type: object
+      description: Aircraft handling object
+      properties:
+        airportCode:
+          type: string
+          description: Airport code
+        towTractorB747400fNbr:
+          type: string
+          description: Number of tow tractor B747400f
+        towTractorB747400fRemarks:
+          type: string
+          description: Remarks of tow tractor B747400f
+        towTractorB7478fNbr:
+          type: string
+          description: Number of tow tractor B7478f
+        towTractorB7478fRemarks:
+          type: string
+          description: Remarks of tow tractor B7478f
+        towbarNbr:
+          type: string
+          description: Number of tow bar
+        towbarRemarks:
+          type: string
+          description: Remarks of tow bar
+        towbarlessB747400fNbr:
+          type: string
+          description: Number of tow barless B747400f
+        towbarlessB747400fRemarks:
+          type: string
+          description: Remarks of tow barless B747400f
+        towbarlessB7478fNbr:
+          type: string
+          description: Number of tow barless B7478f
+        towbarlessB7478fRemarks:
+          type: string
+          description: Remarks of tow barless B7478f
+        pneumaticPowerSourceNbr:
+          type: string
+          description: Number of pneumatic power source
+        pneumaticPowerSourceRemarks:
+          type: string
+          description: Remarks of pneumatic power source
+        cateringTruckNbr:
+          type: string
+          description: Number of catering truck
+        cateringTruckRemarks:
+          type: string
+          description: Remarks of catering truck
+        electricalPowerNbr:
+          type: string
+          description: Number of electrical power
+        electricalPowerRemarks:
+          type: string
+          description: Remarks of electrical power
+        deIcingAntiIcingFacilityNbr:
+          type: string
+          description: Number of deIcing anti-icing facility
+        deIcingAntiIcingFacilityRemarks:
+          type: string
+          description: Remarks of deIcing anti-icing facility
+        deIcingUnitNbr:
+          type: string
+          description: Number of de-icing unit
+        deIcingUnitRemarks:
+          type: string
+          description: Remarks of de-icing unit
+        antiIcingUnitNbr:
+          type: string
+          description: Number of anti-icing unit
+        antiIcingUnitRemarks:
+          type: string
+          description: Remarks of anti-icing unit
+        deIcingFluidRemarks:
+          type: string
+          description: Remarks of de-icing fluid
+        fuelTruckNbr:
+          type: string
+          description: Number of fuel truck
+        fuelTruckRemarks:
+          type: string
+          description: Remarks of fuel truck
+        fuelTypeRemarks:
+          type: string
+          description: Remarks of fuel type
+        lavatoryTruckNbr:
+          type: string
+          description: Number of lavatory truck
+        lavatoryTruckRemarks:
+          type: string
+          description: Remarks of lavatory truck
+        portableWaterTruckNbr:
+          type: string
+          description: Number of portable water truck
+        portableWaterTruckRemarks:
+          type: string
+          description: Remarks of portable water truck
+        noseGearJackNbr:
+          type: string
+          description: Number of nose gear jack
+        noseGearJackRemarks:
+          type: string
+          description: Remarks of nose gear jack
+        mobileAirConUnitNbr:
+          type: string
+          description: Number of mobile air condition unit
+        mobileAirConUnitRemarks:
+          type: string
+          description: Remarks of mobile air condition unit
+        stairwayNbr:
+          type: string
+          description: Number of stair way
+        stairwayRemarks:
+          type: string
+          description: Remarks of stair way
+        tailStanchionNbr:
+          type: string
+          description: Number of tail stanchion
+        tailStanchionRemarks:
+          type: string
+          description: Remarks of tail stanchion
+        tetheringSystemNbr:
+          type: string
+          description: Number of tethering system
+        tetheringSystemRemarks:
+          type: string
+          description: Remarks of tethering system
+    Cargo:
+      type: object
+      description: Cargo handling object
+      properties:
+        airportCode:
+          type: string
+          description: Airport code
+        lowerDeck1Nbr:
+          type: string
+          description: Number of lower deck 1
+        lowerDeck1Capacity:
+          type: string
+          description: Capacity of lower deck 1
+        lowerDeck1Remarks:
+          type: string
+          description: Remarks of lower deck 1
+        lowerDeck2Nbr:
+          type: string
+          description: Number of lower deck 2
+        lowerDeck2Capacity:
+          type: string
+          description: Capacity of lower deck 2
+        lowerDeck2Remarks:
+          type: string
+          description: Remarks of lower deck 2
+        mainDeck120FtNbr:
+          type: string
+          description: Number of main deck 120 feet
+        mainDeck120FtCapacity:
+          type: string
+          description: Capacity of main deck 120 feet
+        mainDeck120FtRemarks:
+          type: string
+          description: Remarks of main deck 120 feet
+        mainDeck120FtCraneNbr:
+          type: string
+          description: Number of crane for main deck 120 feet
+        mainDeck120FtCraneCapacity:
+          type: string
+          description: Capacity of crane for main deck 120 feet
+        mainDeck120FtCraneRemarks:
+          type: string
+          description: Remarks of crane for main deck 120 feet
+        mainDeck140FtNbr:
+          type: string
+          description: Number of main deck 140 feet
+        mainDeck140FtCapacity:
+          type: string
+          description: Capacity of main deck 140 feet
+        mainDeck140FtRemarks:
+          type: string
+          description: Remarks of main deck 140 feet
+        mainDeck140FtCraneNbr:
+          type: string
+          description: Number of crane for main deck 140 feet
+        mainDeck140FtCraneCapacity:
+          type: string
+          description: Capacity of crane for main deck 140 feet
+        mainDeck140FtCraneRemarks:
+          type: string
+          description: Remarks of crane for main deck 140 feet
+        mainDeck220FtNbr:
+          type: string
+          description: Number of main deck 220 feet
+        mainDeck220FtCapacity:
+          type: string
+          description: Capacity of main deck 220 feet
+        mainDeck220FtRemarks:
+          type: string
+          description: Remarks of main deck 220 feet
+        mainDeck220FtCraneNbr:
+          type: string
+          description: Number of crane for main deck 220 feet
+        mainDeck220FtCraneCapacity:
+          type: string
+          description: Capacity of crane for main deck 220 feet
+        mainDeck220FtCraneRemarks:
+          type: string
+          description: Remarks of crane for main deck 220 feet
+        mainDeck240FtNbr:
+          type: string
+          description: Number of main deck 240 feet
+        mainDeck240FtCapacity:
+          type: string
+          description: Capacity of main deck 240 feet
+        mainDeck240FtRemarks:
+          type: string
+          description: Remarks of main deck 240 feet
+        mainDeck240FtCraneNbr:
+          type: string
+          description: Number of crane for main deck 240 feet
+        mainDeck240FtCraneCapacity:
+          type: string
+          description: Capacity of crane for main deck 240 feet
+        mainDeck240FtCraneRemarks:
+          type: string
+          description: Remarks of crane for main deck 240 feet
+        mainDeck320FtNbr:
+          type: string
+          description: Number of main deck 320 feet
+        mainDeck320FtCapacity:
+          type: string
+          description: Capacity of main deck 320 feet
+        mainDeck320FtRemarks:
+          type: string
+          description: Remarks of main deck 320 feet
+        mainDeck320FtCraneNbr:
+          type: string
+          description: Number of crane for main deck 320 feet
+        mainDeck320FtCraneCapacity:
+          type: string
+          description: Capacity of crane for main deck 320 feet
+        mainDeck320FtCraneRemarks:
+          type: string
+          description: Remarks of crane for main deck 320 feet
+        mainDeck340FtNbr:
+          type: string
+          description: Number of main deck 340 feet
+        mainDeck340FtCapacity:
+          type: string
+          description: Capacity of main deck 340 feet
+        mainDeck340FtRemarks:
+          type: string
+          description: Remarks of main deck 340 feet
+        mainDeck340FtCraneNbr:
+          type: string
+          description: Number of crane for main deck 340 feet
+        mainDeck340FtCraneCapacity:
+          type: string
+          description: Capacity of crane for main deck 340 feet
+        mainDeck340FtCraneRemarks:
+          type: string
+          description: Remarks of crane for main deck 340 feet
+        truckLoadingDockNbr:
+          type: string
+          description: Number of truck loading dock
+        truckLoadingDockRemarks:
+          type: string
+          description: Remarks of truck loading dock
+        truckLoadingDockUldNbr:
+          type: string
+          description: Number of ULD for truck loading dock
+        truckLoadingDockUldRemarks:
+          type: string
+          description: Remarks of ULD for truck loading dock
+        uldStackingSystemNbr:
+          type: string
+          description: Number of ULD stacking system
+        uldStackingSystemRemarks:
+          type: string
+          description: Remarks of ULD stacking system
+        slavePalletsNbr:
+          type: string
+          description: Number of slave pallets
+        slavePalletsRemarks:
+          type: string
+          description: Remarks of slave pallets
+        cartNbr:
+          type: string
+          description: Cart number
+        cartRemarks:
+          type: string
+          description: Cart remarks
+        forkliftNbr:
+          type: string
+          description: Number of form lift
+        forkliftCapacity:
+          type: string
+          description: Capacity of fork lift
+        forkliftRemarks:
+          type: string
+          description: Remarks of fork lift
+        uld10FtNbr:
+          type: string
+          description: Number of 10 feet ULD
+        uld10FtRemarks:
+          type: string
+          description: Remarks of 10 feet ULD
+        uld20FtNbr:
+          type: string
+          description: Number of 20 feet ULD
+        uld20FtRemarks:
+          type: string
+          description: Remarks of 20 feet ULD
+        beltLoaderNbr:
+          type: string
+          description: Number of belt loader
+        beltLoaderRemarks:
+          type: string
+          description: Remarks of belt loader
+    Apron:
+      type: object
+      description: Apron equipment object
+      properties:
+        airportCode:
+          type: string
+          description: Airport code
+        craneOnRamp:
+          type: string
+          description: Crane on ramp
+        craneOnRampRemarks:
+          type: string
+          description: Crane on ramp remarks
+        defuelAvailable:
+          type: string
+          description: Is defuel available
+        defuelAvailableRemarks:
+          type: string
+          description: Defuel available remarks
+        electronicParkingGuidance:
+          type: string
+          description: Electronic parking guidance
+        electronicParkingGuidanceRemarks:
+          type: string
+          description: Remarks for electronic parking guidance
+        firefightingEquipmentOnRamp:
+          type: string
+          description: Fire fighting equipment on ramp
+        firefightingEquipmentOnRampRemarks:
+          type: string
+          description: Remarks for fire fighting equipment on ramp
+        fodProgram:
+          type: string
+          description: FOD program
+        fodProgramRemarks:
+          type: string
+          description: Remarks for FOD program
+        followMeCar:
+          type: string
+          description: Follow me car
+        followMeCarRemarks:
+          type: string
+          description: Remarks for follow me car
+        fuelWithEngineRunning:
+          type: string
+          description: Fuel with engine running
+        fuelWithEngineRunningRemarks:
+          type: string
+          description: Remarks for fuel with engine running
+        fuelWithPersonOnBoard:
+          type: string
+          description: Fuel with person onboard
+        fuelWithPersonOnBoardRemarks:
+          type: string
+          description: Remarks for fuel with person onboard
+        irDeIcing:
+          type: string
+          description: Deicing
+        irDeIcingRemarks:
+          type: string
+          description: Deicing remarks
+        maxLengthForLoadingViaSCDRemarks:
+          type: string
+          description: Max length for loading via SCD remarks
+        offGateDeIcing:
+          type: string
+          description: Off gate deicing
+        offGateDeIcingRemarks:
+          type: string
+          description: Off gate deicing remarks
+        parkingB747400fNbr:
+          type: string
+          description: Number of parking for B747 400f
+        parkingB747400fRemarks:
+          type: string
+          description: Remarks of parking for B747 400f
+        parkingB7478fNbr:
+          type: string
+          description: Number of parking for B747 8f
+        parkingB7478fRemarks:
+          type: string
+          description: Remarks of parking for B747 8f
+        pushBack:
+          type: string
+          description: Is push back available
+        pushBackRemarks:
+          type: string
+          description: Push back remarks
+        slope:
+          type: string
+          description: Is slope available
+        slopeRemarks:
+          type: string
+          description: Slope remarks
+        towIn:
+          type: string
+          description: Is towin available
+        towInRemarks:
+          type: string
+          description: Towin remarks
+        truckOnRamp:
+          type: string
+          description: Truck on ramp
+        truckOnRampRemarks:
+          type: string
+          description: Truck on ramp remarks
+    Facility:
+      type: object
+      description: Airport facility object
+      properties:
+        airportCode:
+          type: string
+          description: Airport code
+        coolingFacility:
+          type: string
+          description: Is cooloing facility available
+        coolingFacilityRemarks:
+          type: string
+          description: Cooling facility remarks
+        coolingSurfaceRemarks:
+          type: string
+          description: Cooling surface remarks
+        coolingDoorDimsRemarks:
+          type: string
+          description: Cooling door dimension remarks
+        coolingTempRangeRemarks:
+          type: string
+          description: Cooling tempreture range remarks
+        crane:
+          type: string
+          description: Is crane avaialble
+        craneRemarks:
+          type: string
+          description: Crane remarks
+        animalStorage:
+          type: string
+          description: Is animal storage available
+        animalStorageRemarks:
+          type: string
+          description: Animal storage remarks
+        goodsStorage:
+          type: string
+          description: Is goods storage available
+        goodsStorageRemarks:
+          type: string
+          description: Goods storage remarks
+        freezingFacility:
+          type: string
+          description: Is freezing facility available
+        freezingFacilityRemarks:
+          type: string
+          description: Freezing facility remarks
+        freezingSurfaceRemarks:
+          type: string
+          description: Freezing surface remarks
+        freezingDoorDimsRemarks:
+          type: string
+          description: Freezing door dimension remarks
+        freezingTempRangeRemarks:
+          type: string
+          description: Freezing tempreture range remarks
+        hiValStorage:
+          type: string
+          description: Is high value storage available
+        hiValStorageRemarks:
+          type: string
+          description: High value storage remarks
+        hiValSurfaceRemarks:
+          type: string
+          description: High value surface remarks
+        hiValDoorDimsRemarks:
+          type: string
+          description: High value door dimension remarks
+        hiValTempRangeRemarks:
+          type: string
+          description: High value tempreture range remarks
+        scales10FtNbr:
+          type: string
+          description: Number of 10 feet scale
+        scales10FtRemarks:
+          type: string
+          description: 10 feet scale remarks
+        scales20FtNbr:
+          type: string
+          description: Number of 20 feet scale
+        scales20FtRemarks:
+          type: string
+          description: 20 feet scale remarks
+        xrayMachineNbr:
+          type: string
+          description: Number of xray machine
+        xrayMachineRemarks:
+          type: string
+          description: Xray machine remarks
+    Miscellaneous:
+      type: object
+      description: Airport miscellaneous handling object
+      properties:
+        airportCode:
+          type: string
+          description: Airport code
+        crewTransportation:
+          type: string
+          description: Crew transportation
+        crewTransportationRemarks:
+          type: string
+          description: Crew transportation remarks
+        paxTransportation:
+          type: string
+          description: PAX transportation
+        paxTransportationRemarks:
+          type: string
+          description: PAX transportation remarks
+        fodBin:
+          type: string
+          description: FOD bin
+        fodBinRemarks:
+          type: string
+          description: FOD bin remarks
+        maintenanceSteps:
+          type: string
+          description: Maintenance steps
+        maintenanceStepsRemarks:
+          type: string
+          description: Maintenance steps remarks
+        rubberChocks:
+          type: string
+          description: Rubber chocks
+        rubberChocksRemarks:
+          type: string
+          description: Rubber chocks remarks
+        cones:
+          type: string
+          description: Cones
+        conesRemarks:
+          type: string
+          description: Cones remarks
+    Handling:
+      type: array
+      minItems: 3
+      maxItems: 3
+      description: Airport handling agent objects list
+      items:
+        type: object
+        properties:
+          airportCode:
+            type: string
+            description: Airport code
+          accountNumber:
+            type: string
+            description: Account number
+          address:
+            type: string
+            description: Address
+          callSign:
+            type: string
+            description: Call signature
+          contactEmail:
+            type: string
+            description: Email contact 1
+          contactEmail2:
+            type: string
+            description: Email contact 2
+          contactEmail3:
+            type: string
+            description: Email contact 3
+          contactFax:
+            type: string
+            description: Fax contact 1
+          contactFax2:
+            type: string
+            description: Fax contact 2
+          contactFax3:
+            type: string
+            description: Fax contact 3
+          contactFunction:
+            type: string
+            description: Function contact 1
+          contactFunction2:
+            type: string
+            description: Function contact 2
+          contactFunction3:
+            type: string
+            description: Function contact 3
+          contactMobile:
+            type: string
+            description: Mobile contact 1
+          contactMobile2:
+            type: string
+            description: Mobile contact 2
+          contactMobile3:
+            type: string
+            description: Mobile contact 3
+          contactName:
+            type: string
+            description: Contact name 1
+          contactName2:
+            type: string
+            description: Contact name 2
+          contactName3:
+            type: string
+            description: Contact name 3
+          contactPhone:
+            type: string
+            description: Phone contact 1
+          contactPhone2:
+            type: string
+            description: Phone contact 2
+          contactPhone3:
+            type: string
+            description: Phone contact 3
+          contactWebpage:
+            type: string
+            description: Webpage contact 1
+          contactWebpage2:
+            type: string
+            description: Webpage contact 2
+          contactWebpage3:
+            type: string
+            description: Webpage contact 3
+          fax:
+            type: string
+            description: FAX
+          handler:
+            type: string
+            description: Handler
+          handlerType:
+            type: string
+            description: Handler type
+            enum:
+              - C
+              - R
+              - T
+            uniqueItems: true
+          handlingRepresentative:
+            type: string
+            description: Handling representative
+          radioFrequency:
+            type: string
+            description: Radio frequency
+          remarks:
+            type: string
+            description: Remarks
+          rmkHoursNet:
+            type: string
+            description: RMK net hours
+          sita:
+            type: string
+            description: SITA 1
+          sita2:
+            type: string
+            description: SITA 2
+          telephone:
+            type: string
+            description: Telephone number
+          terms:
+            type: string
+            description: Terms
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: apikey
+      in: header
+    BearerAuth:
+      type: http
+      scheme: bearer
