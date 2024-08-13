@@ -14,7 +14,7 @@ info:
   license:
     name: Apache 2.0vd
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 1.0.0dvd
+  version: github
 externalDocs:
   description: Find out more about XApi
   url: http://xapihub.io
