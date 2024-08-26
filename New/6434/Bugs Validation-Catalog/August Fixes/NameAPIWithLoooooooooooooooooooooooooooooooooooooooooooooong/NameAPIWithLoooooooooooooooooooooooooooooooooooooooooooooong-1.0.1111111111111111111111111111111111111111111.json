@@ -2,7 +2,6 @@
   "openapi": "3.1.0",
   "info": {
     "title": "OpenAPI 3.1 Specification for CoffeeShop",
-    "description": "NameAPIWithLoooooooooooooooooooooooooooooooooooooooooooooong"
     "termsOfService": "http://xapihub.io/terms/",
     "contact": {
       "email": "info@xapihub.io"
@@ -11,7 +10,7 @@
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "version": "1.0.0"
+    "version": "1.0.1"
   },
   "servers": [
     {
