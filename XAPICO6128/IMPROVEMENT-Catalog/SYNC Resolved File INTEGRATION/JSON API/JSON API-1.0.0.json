@@ -1,0 +1,478 @@
+{
+  "openapi": "3.1.0",
+  "servers": [
+    {
+      "description": "SwaggerHub API Auto Mocking",
+      "url": "https://virtserver.swaggerhub.com/CHAMP-Cargo-Systems/Flight-Schedule-Alert-API/1.0.0"
+    },
+    {
+      "url": "https://api-gateway.champ.aero/csp/transport-means/v1/flight-schedule-alerts"
+    }
+  ],
+  "info": {
+    "description": "This is a simple API",
+    "version": "1.0.0",
+    "title": "Flight Schedule Alert API",
+    "contact": {
+      "email": "api.gateway@champ.aero",
+      "name": "CHAMP Cargosystems"
+    }
+  },
+  "security": [
+    {
+      "ApiKeyAuth": [],
+      "BearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "flight-schedule-alert-controller",
+      "description": "Allows to create,search,update,delete flight schedule alerts details."
+    }
+  ],
+  "paths": {
+    "/flight-schedule-alerts": {
+      "post": {
+        "tags": [
+          "flight-schedule-alert-controller"
+        ],
+        "summary": "Allows you to create alert for flight in Cargospot.",
+        "operationId": "createFlightScheduleAlert",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FlightScheduleAlert"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "headers": {
+              "location": {
+                "description": "URL of the created flight alert. A unique Cargospot internal ID for this parts (E.g. 1234) will be appended (at the end) to the path URL. This path URL (including ID) can be used to retrieve the flight schedule alert details.",
+                "schema": {
+                  "type": "string",
+                  "example": "https://api-gateway.champ.aero/csp/transport-means/v1/flight-schedule-alert/1234"
+                }
+              }
+            },
+            "content": {}
+          },
+          "400": {
+            "description": "Bad Request (Invalid syntax)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/CD/v1/#/components/SCHEMAS/AirWaybillNumber"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (Authentication not done)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/CD/v1/#/components/SCHEMAS/Country"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden (No access rights to the content)",
+            "content": {}
+          },
+          "422": {
+            "description": "Un-processable Entity (Semantic error)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/CD/v1/#/components/SCHEMAS/MasterAirWaybill"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/CD/v1/#/components/SCHEMAS/TransportMeans"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/flight-schedule-alerts/search": {
+      "post": {
+        "tags": [
+          "flight-schedule-alert-controller"
+        ],
+        "summary": "Search flight schedule alert.",
+        "operationId": "searchFlight",
+        "parameters": [
+          {
+            "$ref": "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/Hot-fixes/XAPICO-6076-Model/1-0-1/#/components/PARAMETERS/UserIdParam"
+          },
+          {
+            "$ref": "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/XAPICO6301/Sub-Collection-6301/2nd-level-sub-collection/Ref-Suggestion-1-Bug-validation/V1/#/components/PARAMETERS/stationCode"
+          },
+          {
+            "$ref": "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/XAPICO6301/Sub-Collection-6301/2nd-level-sub-collection/Ref-Suggestion-1-Bug-validation/NewV2/#/components/PARAMETERS/deliveryId"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchCriteria"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagedResourcesFlightScheduleAlert"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Invalid syntax)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/15th-Fixes/YAML/1-0-3/#/components/SCHEMAS/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (Authentication not done)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/Org-catalog-APIs/XAPICO-6102-Org-Basic-Schema-Model/1-0-1/#/components/SCHEMAS/Fault"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden (No access rights to the content)",
+            "content": {}
+          },
+          "422": {
+            "description": "Un-processable Entity (Semantic error)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/CD/v1/#/components/SCHEMAS/HouseAirWaybill"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Unauthorized (Authentication not done)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/CD/v1/#/components/SCHEMAS/ChargeItems"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/flight-schedule-alerts/{id}": {
+      "get": {
+        "tags": [
+          "flight-alert-controller"
+        ],
+        "summary": "Retrieve details for a specific flight alert.",
+        "operationId": "retrieveFlightAlertById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Unique Cargospot internal ID (technical id) for this flight alert.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": 241536
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlightScheduleAlert"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Invalid syntax)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/CD/v1/#/components/SCHEMAS/SpaceAllocation"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (Authentication not done)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/Model-4/1-0-2/#/components/SCHEMAS/CreateInventoryItemResource"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden (No access rights to the content)",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {}
+          },
+          "429": {
+            "description": "Unauthorized (Authentication not done)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/CD/v1/#/components/SCHEMAS/TransportMeans"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "flight-schedule-alert-controller"
+        ],
+        "summary": "Allows you to update flight alert in Cargospot.",
+        "operationId": "updateFlightAlert",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Unique Cargospot internal ID (technical id) for this flight alert.",
+            "schema": {
+              "type": "string",
+              "example": 6567989
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FlightScheduleAlert"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content (Successful)",
+            "content": {}
+          },
+          "400": {
+            "description": "Bad Request (Invalid syntax)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/CD/v1/#/components/SCHEMAS/SpecialHandlingDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (Authentication not done)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/Model-4/1-0-2/#/components/SCHEMAS/OrderBaseResource"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden (No access rights to the content)",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {}
+          },
+          "422": {
+            "description": "Un-processable Entity (Semantic error)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/Model-4/1-0-2/#/components/SCHEMAS/InventoryItemResource"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/Org-catalog-APIs/Model-Org/1-0-1/#/components/SCHEMAS/CreateNotificationResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "FlightAlert": {
+        "required": [
+          "alert type",
+          "alert level",
+          "email",
+          "sendOnManual"
+        ],
+        "properties": {
+          "alertType": {
+            "description": "Drop down Selection for type of alert for flight alert.",
+            "example": "D,E,F,N,R,T,C,I"
+          },
+          "alertLevel": {
+            "description": "Drop down Selection for type of alert level for flight alert.",
+            "example": "F,S"
+          },
+          "email": {
+            "type": "string",
+            "description": "Multiple email id allowed to send Flight schedule alert.",
+            "example": "xyz@c.com"
+          },
+          "sendOnManual": {
+            "type": "boolean",
+            "description": "Option check box with default unchecked state.",
+            "example": "Y,N"
+          }
+        }
+      },
+      "PagedResourcesFlightScheduleAlert": {
+        "type": "object",
+        "properties": {
+          "flightScheduleAlertList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FlightScheduleAlert"
+            }
+          },
+          "_links": {
+            "$ref": "https://stage.xapihub.io/models/SHINEEE-Entertainment/BUgs-ValiDations-Catalog/A3-Model-API-Gateway-Components/v1/#/components/SCHEMAS/PageLinksWithoutExportLink"
+          },
+          "page": {
+            "$ref": "https://stage.xapihub.io/models/SHINEEE-Entertainment/SHINEEE-Entertainment-Catalog/Test/A4-Model-APIGatewayComponents/v1/#/components/SCHEMAS/Pages"
+          }
+        }
+      },
+      "FlightScheduleAlert": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique Cargospot internal ID for the flight schedule alert.",
+            "example": 123456
+          },
+          "alertType": {
+            "type": "string",
+            "description": "The alertType code of should be existing in Cargospot master data."
+          },
+          "alertLevel": {
+            "type": "string",
+            "description": "Category of the flight schedule alertlevel Values include F-Flight, S-Schedule.",
+            "example": "F"
+          },
+          "sendOnManual": {
+            "type": "boolean",
+            "description": "Checkbox to with default unchecked state.",
+            "example": true
+          },
+          "email": {
+            "type": "string",
+            "description": "Email address for to send flight schedule alert.",
+            "example": "xyz@champ.aero"
+          }
+        }
+      },
+      "SearchCriteria": {
+        "type": "object",
+        "properties": {
+          "ids": {
+            "type": "string",
+            "items": {
+              "type": "string",
+              "description": "Unique Cargospot internal id for the flight schedule alert.",
+              "example": 123456
+            }
+          },
+          "alertType": {
+            "type": "string",
+            "items": {
+              "type": "string",
+              "description": "Users can search and filter Flight Alerts using the following parameters T=Date/Time Change,E=Equipment Change,X=Flight Cancelled,N=New Flight,R=Replace Flight,C=Flight No. Change,I=Reinstate.",
+              "example": "D,E,F,N,R,T,C,I"
+            }
+          },
+          "alertLevel": {
+            "type": "string",
+            "items": {
+              "type": "string",
+              "description": "Users can search and filter Flight Alerts using the following parameters F=Flight;S=Schedule.",
+              "example": "F"
+            }
+          },
+          "email": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "description": "Allows to search based on email addresses used in.",
+              "example": "xyz@champ.aero"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "name": "apikey",
+        "in": "header"
+      },
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}
