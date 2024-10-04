@@ -46,33 +46,13 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  airlinePrefix:
-                    type: string
-                    description: Coded representation of an airline.
-                    example: "950"
-                  serial:
-                    type: string
-                    description: A serial number allocated by an airline to identify a particular
-                      air cargo shipment and the associated air waybill.
-                    example: "10203045"
+                $ref: "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/CD/v1/#/components/SCHEMAS/AirWaybillNumber"
         "401":
           description: Unauthorized (Authentication not done)
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  code:
-                    type: string
-                    description: ISO 2-letter country code. This indicates the country of the
-                      address of the participant.
-                    example: US
-                  name:
-                    type: string
-                    description: Country name.
-                    example: United States of America
+                $ref: "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/CD/v1/#/components/SCHEMAS/Country"
         "403":
           description: Forbidden (No access rights to the content)
           content: {}
@@ -81,86 +61,13 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  prefix:
-                    type: string
-                    example: "172"
-                    description: Master AWB Identification
-                  serialNumber:
-                    type: string
-                    example: "14317001"
-                    description: Master AWB Identification
-                  originCode:
-                    type: string
-                    example: JFK
-                    description: Airport/City Code of Origin
-                  destinationCode:
-                    type: string
-                    example: MNL
-                    description: Airport/City Code of Destination
-                  shipmentDescriptionCode:
-                    type: string
-                    example: TOTAL_CONSIGNMENT
-                    description: TOTAL_CONSIGNMENT - total number of pieces of complete
-                      shipment.</br> PART_CONSIGNMENT - those pieces less than
-                      the total consignment carried on one flight.</br>
-                      SPLIT_CONSIGNMENT - those pieces of a total consignment
-                      carried in more than one ULD(s) and/or bulk on the same
-                      flight.</br> DIVIDED_CONSIGNMENT - those pieces of a part
-                      consignment in more than one ULD(s) and/or bulk on the
-                      same flight.</br> MULTI_SHIPMENTS - those pieces less than
-                      the total consignment carried on more than one
-                      flight.</br>
-                    enum:
-                      - TOTAL_CONSIGNMENT
-                      - DIVIDED_CONSIGNMENT
-                      - PART_CONSIGNMENT
-                      - SPLIT_CONSIGNMENT
-                      - MULTI_SHIPMENTS
-                  totalPieces:
-                    type: integer
-                    format: int32
-                    description: Number of pieces in House"s Master Shipment
-                    example: "5"
-                  totalWeight:
-                    type: object
-                    properties:
-                      amount:
-                        type: number
-                        example: "12.1"
-                        description: amount of weight of House"s Master shipment
-                      unit:
-                        type: string
-                        example: KG
-                        description: unit of weight of House"s Master shipment
-                        enum:
-                          - KG
-                          - G
+                $ref: "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/CD/v1/#/components/SCHEMAS/MasterAirWaybill"
         "429":
           description: Too Many Requests
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  carrierCode:
-                    type: string
-                    description: Carrier Code
-                    example: CV
-                  number:
-                    type: string
-                    description: Flight Number
-                    example: "7721"
-                  date:
-                    type: string
-                    description: Date of the Flight
-                    format: date
-                    example: 2010-10-10
-                  flightReference:
-                    type: string
-                    description: Reference of the flight
-                    example: CV/7721
+                $ref: "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/CD/v1/#/components/SCHEMAS/TransportMeans"
   /flight-schedule-alerts/search:
     post:
       tags:
@@ -168,27 +75,9 @@ paths:
       summary: Search flight schedule alert.
       operationId: searchFlight
       parameters:
-        - name: userId
-          in: path
-          required: true
-          description: The ID of the user
-          schema:
-            type: string
-        - name: stationCode
-          in: header
-          description: 3-letter IATA code of the station at which this transaction is
-            being recorded.
-          required: true
-          schema:
-            type: string
-            example: LHR
-        - name: id
-          in: path
-          required: true
-          description: Unique identifier for the delivery record.
-          schema:
-            type: integer
-            example: "33546822"
+        - $ref: "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/Hot-fixes/XAPICO-6076-Model/1-0-1/#/components/PARAMETERS/UserIdParam"
+        - $ref: "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/XAPICO6301/Sub-Collection-6301/2nd-level-sub-collection/Ref-Suggestion-1-Bug-validation/V1/#/components/PARAMETERS/stationCode"
+        - $ref: "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/XAPICO6301/Sub-Collection-6301/2nd-level-sub-collection/Ref-Suggestion-1-Bug-validation/NewV2/#/components/PARAMETERS/deliveryId"
       requestBody:
         content:
           application/json:
@@ -207,68 +96,13 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  fieldErrors:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        fieldName:
-                          type: string
-                          description: This is the error field
-                          example: price
-                        rejectedValue:
-                          type: string
-                          description: This is the rejected value belong to error field
-                          example: 5.0.2
-                        userMessage:
-                          type: string
-                          description: Describe the error message
-                          example: Invalid input for price field
-                  globalErrors:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        userMessage:
-                          type: string
-                          description: Describe the error message
-                          example: Maximum value exceeded
+                $ref: "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/15th-Fixes/YAML/1-0-3/#/components/SCHEMAS/ErrorResponse"
         "401":
           description: Unauthorized (Authentication not done)
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  faultstring:
-                    type: string
-                    example: Unable to search the active Allotments.
-                  detail:
-                    type: object
-                    properties:
-                      errorcode:
-                        type: string
-                        example: active.allotment.search.error
-                      rootcause:
-                        type: object
-                        properties:
-                          globalErrors:
-                            type: array
-                            items:
-                              type: object
-                              properties:
-                                code:
-                                  type: string
-                                  example: allotmentCode
-                                userMessage:
-                                  type: string
-                                  example: No property allotmentCode found for type AllotmentEntity!.
-                                fields:
-                                  type: array
-                                  items:
-                                    type: string
+                $ref: "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/Org-catalog-APIs/XAPICO-6102-Org-Basic-Schema-Model/1-0-1/#/components/SCHEMAS/Fault"
         "403":
           description: Forbidden (No access rights to the content)
           content: {}
@@ -277,607 +111,13 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    example: "123456"
-                    description: Unique resource id.
-                  participantId:
-                    type: string
-                    example: pid123
-                    description: Unique Cargospot Portal participant id.
-                  carrierCode:
-                    type: string
-                    example: XS
-                    description: Airline code
-                  modifiedOn:
-                    type: string
-                    format: date-time
-                    description: Date House Waybill is updated.
-                  createdOn:
-                    type: string
-                    format: date-time
-                    description: Date House Waybill is created.
-                  createdBy:
-                    type: string
-                    description: User Id who created the resource data.
-                    example: ccshelpxxs
-                  modifiedBy:
-                    type: string
-                    description: User Id who last modified the resource data.
-                    example: ccshelpxxs
-                  status:
-                    type: string
-                    example: Sent
-                    enum:
-                      - Draft
-                      - Sent
-                      - Acknowledged
-                      - Denied
-                      - Template
-                  houseWaybillReference:
-                    type: string
-                    example: LHR1001
-                    description: House waybill number.
-                  templateName:
-                    type: string
-                    example: TEMPLATE01
-                    description: Template name. Required if status is Template.
-                  masterAirWaybill:
-                    type: object
-                    properties:
-                      prefix:
-                        type: string
-                        example: "172"
-                        description: Master AWB Identification
-                      serialNumber:
-                        type: string
-                        example: "14317001"
-                        description: Master AWB Identification
-                      originCode:
-                        type: string
-                        example: JFK
-                        description: Airport/City Code of Origin
-                      destinationCode:
-                        type: string
-                        example: MNL
-                        description: Airport/City Code of Destination
-                      shipmentDescriptionCode:
-                        type: string
-                        example: TOTAL_CONSIGNMENT
-                        description: TOTAL_CONSIGNMENT - total number of pieces of complete
-                          shipment.</br> PART_CONSIGNMENT - those pieces less
-                          than the total consignment carried on one flight.</br>
-                          SPLIT_CONSIGNMENT - those pieces of a total
-                          consignment carried in more than one ULD(s) and/or
-                          bulk on the same flight.</br> DIVIDED_CONSIGNMENT -
-                          those pieces of a part consignment in more than one
-                          ULD(s) and/or bulk on the same flight.</br>
-                          MULTI_SHIPMENTS - those pieces less than the total
-                          consignment carried on more than one flight.</br>
-                        enum:
-                          - TOTAL_CONSIGNMENT
-                          - DIVIDED_CONSIGNMENT
-                          - PART_CONSIGNMENT
-                          - SPLIT_CONSIGNMENT
-                          - MULTI_SHIPMENTS
-                      totalPieces:
-                        type: integer
-                        format: int32
-                        description: Number of pieces in House"s Master Shipment
-                        example: "5"
-                      totalWeight:
-                        type: object
-                        properties:
-                          amount:
-                            type: number
-                            example: "12.1"
-                            description: amount of weight of House"s Master shipment
-                          unit:
-                            type: string
-                            example: KG
-                            description: unit of weight of House"s Master shipment
-                            enum:
-                              - KG
-                              - G
-                  originCode:
-                    type: string
-                    example: JFK
-                    description: Airport/City Code of Origin.
-                  destinationCode:
-                    type: string
-                    example: MNL
-                    description: Airport/City Code of Destination.
-                  pieces:
-                    type: integer
-                    format: int32
-                    example: "12"
-                    description: Number of pieces in House Shipment.
-                  weight:
-                    type: object
-                    properties:
-                      amount:
-                        type: number
-                        example: "12.1"
-                        description: amount of weight
-                      unit:
-                        type: string
-                        example: KILOGRAM
-                        description: unit of weight
-                        enum:
-                          - KILOGRAM
-                          - POUND
-                  natureOfGoods:
-                    type: string
-                    example: FROZEN GOODS
-                    description: Description of packages in the shipment.
-                  slac:
-                    type: integer
-                    format: int32
-                    example: "12"
-                    description: Shippers Load And Count
-                  specialHandlingCodes:
-                    type: array
-                    maxItems: "9"
-                    items:
-                      type: string
-                      example: SPH
-                      description: Special Handling Codes
-                  freeTextDescriptionOfGoods:
-                    type: string
-                    example: EXTRA GOODS DESCRIPTION
-                    description: Free text description of goods
-                  harmonisedCommodityCodes:
-                    type: array
-                    items:
-                      type: string
-                      example: "112212"
-                      description: Number identifying goods for Customs or statistical purposes
-                  otherCustomsInformation:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        countryCode:
-                          type: string
-                          example: AS
-                          description: ISO Country code
-                        informationIdentifier:
-                          type: string
-                          example: CNE
-                          description: Information Identifier
-                        controlInformation:
-                          type: string
-                          example: CONTACT_PERSON
-                          description: Control Information
-                          enum:
-                            - ACCOUNT_CONSIGNOR
-                            - AUTHORISED_ECONOMIC_OPERATOR
-                            - AUTOMATED_BROKER_INTERFACE
-                            - CERTIFICATE_NUMBER
-                            - DANGEROUS_GOODS
-                            - EXEMPTION_LEGEND
-                            - INVOICE_NUMBER
-                            - ITEM_NUMBER
-                            - FACILITIES_INFORMATION
-                            - KNOWN_CONSIGNOR
-                            - MOVEMENT_REFERENCE_NUMBER
-                            - PACKING_LIST_NUMBER
-                            - REGULATED_AGENT
-                            - REGULATED_CARRIER
-                            - LICENSE_IDENTIFICATION
-                            - DECLARATION_IDENTIFICATION
-                            - SCREENING_METHOD
-                            - SECURITY_STATUS_DATE_AND_TIME
-                            - SECURITY_STATUS_NAME_OF_ISSUER
-                            - SECURITY_STATUS
-                            - SECURITY_TEXTUAL_STATEMENT
-                            - EXPIRY_DATE
-                            - SEAL_NUMBER
-                            - SYSTEM_DOWNTIME_REFERENCE
-                            - TRADER_IDENTIFICATION_NUMBER
-                            - UNIQUE_CONSIGNMENT_REFERENCE_NUMBER
-                            - CUSTOMS_SECURITY_BLOCK
-                            - CUSTOMS_SECURITY_HOLD_DO_NOT_LOAD
-                            - CUSTOMS_RELEASE_OK
-                            - CONTACT_PERSON
-                            - CONTACT_TELEPHONE_NUMBER
-                        supplementaryControlInformation:
-                          type: string
-                          example: "2343242"
-                          description: Supplementary Control Information
-                  shipper:
-                    type: object
-                    properties:
-                      name:
-                        type: string
-                        example: JAGUAR CARS
-                        description: Name of participant
-                      additionalName:
-                        type: string
-                        example: FORWARDING COMPANY
-                        description: Additional name of participant
-                      accountNumber:
-                        type: string
-                        example: ABC94269
-                        description: Coded identification of a participant
-                      address:
-                        type: object
-                        properties:
-                          street:
-                            type: string
-                            example: 75TH CUNNINGHAM HIGHWAY
-                            description: Street Address of participant
-                          additionalAddress:
-                            type: string
-                            example: NORTH STREET
-                            description: Additional address of participant
-                          city:
-                            type: string
-                            example: LONDON
-                            description: City of participant
-                          stateOrProvince:
-                            type: string
-                            example: QUE
-                            description: State or Province of participant
-                          countryCode:
-                            type: string
-                            example: GB
-                            description: Country code of participant
-                          postCode:
-                            type: string
-                            example: "7970123"
-                            description: Post code of participant
-                      contacts:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            type:
-                              type: string
-                              example: FAX
-                              description: Contact Identifier of participant
-                              enum:
-                                - FAX
-                                - TELEPHONE
-                                - TELEX
-                            value:
-                              type: string
-                              example: "774535"
-                              description: Contact Number of participant
-                  consignee:
-                    type: object
-                    properties:
-                      name:
-                        type: string
-                        example: JAGUAR CARS
-                        description: Name of participant
-                      additionalName:
-                        type: string
-                        example: FORWARDING COMPANY
-                        description: Additional name of participant
-                      accountNumber:
-                        type: string
-                        example: ABC94269
-                        description: Coded identification of a participant
-                      address:
-                        type: object
-                        properties:
-                          street:
-                            type: string
-                            example: 75TH CUNNINGHAM HIGHWAY
-                            description: Street Address of participant
-                          additionalAddress:
-                            type: string
-                            example: NORTH STREET
-                            description: Additional address of participant
-                          city:
-                            type: string
-                            example: LONDON
-                            description: City of participant
-                          stateOrProvince:
-                            type: string
-                            example: QUE
-                            description: State or Province of participant
-                          countryCode:
-                            type: string
-                            example: GB
-                            description: Country code of participant
-                          postCode:
-                            type: string
-                            example: "7970123"
-                            description: Post code of participant
-                      contacts:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            type:
-                              type: string
-                              example: FAX
-                              description: Contact Identifier of participant
-                              enum:
-                                - FAX
-                                - TELEPHONE
-                                - TELEX
-                            value:
-                              type: string
-                              example: "774535"
-                              description: Contact Number of participant
-                  chargeDeclaration:
-                    type: object
-                    properties:
-                      currencyCode:
-                        type: string
-                        example: EUR
-                        description: ISO currency Code
-                      chargeCode:
-                        type: string
-                        description: Code identifying a method of payment of charges.
-                        example: ALL_CHARGES_COLLECT
-                        enum:
-                          - ALL_CHARGES_COLLECT
-                          - ALL_CHARGES_COLLECT_BY_CREDIT_CARD
-                          - ALL_CHARGES_COLLECT_BY_GBL
-                          - ALL_CHARGES_PREPAID_CASH
-                          - ALL_CHARGES_PREPAID_CREDIT
-                          - ALL_CHARGES_PREPAID_BY_CREDIT_CARD
-                          - ALL_CHARGES_PREPAID_BY_GBL
-                          - DESTINATION_COLLECT_CASH
-                          - DESTINATION_COLLECT_CREDIT
-                          - DESTINATION_COLLECT_BY_MCO
-                          - NO_CHARGE
-                          - NO_WEIGHT_CHARGE_OTHER_CHARGES_COLLECT
-                          - NO_WEIGHT_CHARGE_OTHER_CHARGES_PREPAID_BY_CREDIT_CARD
-                          - NO_WEIGHT_CHARGE_OTHER_CHARGES_PREPAID_BY_GBL
-                          - NO_WEIGHT_CHARGE_OTHER_CHARGES_PREPAID_CASH
-                          - NO_WEIGHT_CHARGE_OTHER_CHARGES_PREPAID_CREDIT
-                          - PARTIAL_COLLECT_CREDIT_PARTIAL_PREPAID_CASH
-                          - PARTIAL_COLLECT_CREDIT_PARTIAL_PREPAID_CREDIT
-                          - PARTIAL_COLLECT_CREDIT_CARD_PARTIAL_PREPAID_CASH
-                          - PARTIAL_COLLECT_CREDIT_CARD_PARTIAL_PREPAID_CREDIT
-                          - PARTIAL_PREPAID_CASH_PARTIAL_COLLECT_CASH
-                          - PARTIAL_PREPAID_CREDIT_PARTIAL_COLLECT_CASH
-                          - PARTIAL_PREPAID_CREDIT_CARD_PARTIAL_COLLECT_CASH
-                          - PARTIAL_PREPAID_CREDIT_CARD_PARTIAL_COLLECT_CREDIT
-                          - PARTIAL_PREPAID_CREDIT_CARD_PARTIAL_COLLECT_CREDIT_CARD
-                      weightValuationType:
-                        type: string
-                        example: Prepaid
-                        description: Code indicating whether payment will be made at origin (prepaid) or
-                          at destination (collect) for weight/valuation.
-                        enum:
-                          - Prepaid
-                          - Collect
-                      otherChargesType:
-                        type: string
-                        example: Collect
-                        description: Code indicating whether payment will be made at origin (prepaid) or
-                          at destination (collect) for other charges.
-                        enum:
-                          - Prepaid
-                          - Collect
-                      declaredValueForCarriage:
-                        type: string
-                        example: "100.00"
-                        description: Declared value for carriage. Specifies either a value or No Value
-                          Declared (NVD).
-                      declaredValueForCustoms:
-                        type: string
-                        example: NCV
-                        description: Declared value for customs. Specifies either a value or No Customs
-                          Value (NCV).
-                      declaredValueForInsurance:
-                        type: string
-                        example: XXX
-                        description: Declared value for insurance. Specifies either a value or No Value
-                          (XXX).
+                $ref: "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/CD/v1/#/components/SCHEMAS/HouseAirWaybill"
         "429":
           description: Unauthorized (Authentication not done)
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  pieces:
-                    type: integer
-                    description: Number of loose items and/or ULD"s as accepted for carriage.
-                    format: int32
-                    example: "8"
-                  rateCombinationPointCityCode:
-                    type: string
-                    description: Point over which sector rates are combined. (Pattern is uppercase
-                      three-letter code.)
-                    example: PAR
-                  grossWeight:
-                    type: object
-                    properties:
-                      amount:
-                        type: number
-                        example: "12.1"
-                        description: amount of weight
-                      unit:
-                        type: string
-                        example: KILOGRAM
-                        description: unit of weight
-                        enum:
-                          - KILOGRAM
-                          - POUND
-                  commodityItemNumbers:
-                    type: array
-                    description: Commodity Item Numbers
-                    example:
-                      - "9017"
-                    items:
-                      type: string
-                      description: Commodity Item Numbers
-                      example: '["9017"]'
-                  goodsDescription:
-                    type: string
-                    description: Nature and quantity of goods.
-                    example: Tooth paste
-                  consolidation:
-                    type: boolean
-                    description: Toggles whether "goodsDescription" is contained in the house
-                      waybill.
-                    example: true
-                  harmonisedCommodityCodes:
-                    type: array
-                    description: Harmonised Commodity Codes
-                    example:
-                      - "427127829"
-                    items:
-                      type: string
-                      description: Harmonised Commodity Codes
-                      example: '["427127829"]'
-                  countryCodeOfOriginOfGoods:
-                    type: string
-                    description: ISO Country Code of Origin of Goods
-                    example: PH
-                  packages:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        pieces:
-                          type: integer
-                          description: Number of Pieces in Charge Item
-                          format: int32
-                          example: "1"
-                        weight:
-                          type: object
-                          properties:
-                            amount:
-                              type: number
-                              example: "12.1"
-                              description: amount of weight
-                            unit:
-                              type: string
-                              example: KILOGRAM
-                              description: unit of weight
-                              enum:
-                                - KILOGRAM
-                                - POUND
-                        volume:
-                          type: object
-                          properties:
-                            amount:
-                              type: number
-                              example: "12.01"
-                            unit:
-                              type: string
-                              example: MC
-                              enum:
-                                - MC
-                                - CC
-                                - CF
-                                - CI
-                                - GA
-                                - LT
-                        dimensions:
-                          type: object
-                          properties:
-                            unit:
-                              type: string
-                              description: unit of measurement
-                              example: CENTIMETRE
-                            length:
-                              type: number
-                              description: length value
-                              example: "12.01"
-                            width:
-                              type: number
-                              description: width value
-                              example: "12.01"
-                            height:
-                              type: number
-                              description: height value
-                              example: "12.01"
-                        uld:
-                          $ref: "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/CD/v1/#/components/SCHEMAS/Uld"
-                        shippersLoadAndCount:
-                          type: integer
-                          description: Shippers Load And Count
-                          format: int32
-                          example: "2"
-                  charges:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        chargeableWeight:
-                          type: object
-                          properties:
-                            amount:
-                              type: number
-                              example: "12.1"
-                              description: amount of weight
-                            unit:
-                              type: string
-                              example: KILOGRAM
-                              description: unit of weight
-                              enum:
-                                - KILOGRAM
-                                - POUND
-                        rateClassCode:
-                          type: string
-                          description: Code representing the basis rate category.
-                          example: BASIC_CHARGE
-                          enum:
-                            - BASIC_CHARGE
-                            - CLASS_RATE_REDUCTION
-                            - CLASS_RATE_SURCHARGE
-                            - INTERNATIONAL_PRIORITY_SERVICE_RATE
-                            - MINIMUM_CHARGE
-                            - NORMAL_RATE
-                            - QUANTITY_RATE
-                            - RATE_PER_KILOGRAM
-                            - SPECIFIC_COMMODITY_RATE
-                            - UNIT_LOAD_DEVICE_ADDITIONAL_INFORMATION
-                            - UNIT_LOAD_DEVICE_ADDITIONAL_RATE
-                            - UNIT_LOAD_DEVIDE_BASIC_CHARGE_OR_RATE
-                            - UNIT_LOAD_DEVICE_DISCOUNT
-                        rateClassCodeBasis:
-                          type: string
-                          description: Code representing the basis rate category.
-                          example: BASIC_CHARGE
-                          enum:
-                            - BASIC_CHARGE
-                            - CLASS_RATE_REDUCTION
-                            - CLASS_RATE_SURCHARGE
-                            - INTERNATIONAL_PRIORITY_SERVICE_RATE
-                            - MINIMUM_CHARGE
-                            - NORMAL_RATE
-                            - QUANTITY_RATE
-                            - RATE_PER_KILOGRAM
-                            - SPECIFIC_COMMODITY_RATE
-                            - UNIT_LOAD_DEVICE_ADDITIONAL_INFORMATION
-                            - UNIT_LOAD_DEVICE_ADDITIONAL_RATE
-                            - UNIT_LOAD_DEVIDE_BASIC_CHARGE_OR_RATE
-                            - UNIT_LOAD_DEVICE_DISCOUNT
-                        classRatePercentage:
-                          type: number
-                          description: A surcharge or discount percentage applied to an applicable rate or
-                            charge.
-                          example: "67.01"
-                        uldRateClassType:
-                          type: string
-                          description: Coded description of a Unit Load Device rate class. Must match
-                            regular expression "[0-9][A-Z]{0,2}".
-                          example: "8"
-                        rateOrCharge:
-                          type: number
-                          description: Representation of a rate, charge or discount.
-                          example: "1234.01"
-                        totalChargeAmount:
-                          type: number
-                          description: Total Charge Amount
-                          example: "25.01"
-                  serviceCode:
-                    type: string
-                    description: Service Code
-                    example: AIRPORT_TO_AIRPORT
+                $ref: "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/CD/v1/#/components/SCHEMAS/ChargeItems"
   "/flight-schedule-alerts/{id}":
     get:
       tags:
@@ -904,92 +144,13 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  code:
-                    type: string
-                    enum:
-                      - CA
-                      - HK
-                      - HL
-                      - HN
-                      - KK
-                      - LL
-                      - NA
-                      - NL
-                      - NN
-                      - SS
-                      - UN
-                      - UU
-                      - QU
-                      - KL
-                      - KC
-                      - LA
-                      - XX
-                      - OF
-                      - NS
-                      - CN
-                    description: Space allocation codes used for booking. Possible values are CA -
-                      Space allocation against allotment, HK - Holding
-                      confirmed, HL - Holding Wait List, HN - Have requested
-                      space allocation, KK - Space Confirmed, LL - Wait list, NA
-                      - Requesting space allocation; if not available will
-                      accept alternative, NL - Requesting space allocation; for
-                      wait list, NN - Requesting space allocation; will not
-                      accept alternative, SS - Reporting Sale, UN - No
-                      confirmation, UU - Unable to confirm space, QU - Unable to
-                      confirm queue to FCTL, KL - Wait list confirmed, KC - Wait
-                      list confirmed, LA - Stand by virtual pending confirm, XX
-                      - Cancel previous space allocation, OF Offload, NS â€“ No
-                      Show, CN - Cancellation noted.
-                    example: KK
-                  description:
-                    type: string
-                    description: Space allocation code description.
-                    example: SPACE CONFIRMED
+                $ref: "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/CD/v1/#/components/SCHEMAS/SpaceAllocation"
         "401":
           description: Unauthorized (Authentication not done)
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - type: object
-                    properties:
-                      minQuantity:
-                        type: integer
-                        format: int64
-                        example: "10"
-                    allOf:
-                      - required:
-                          - name
-                          - quantity
-                        type: object
-                        properties:
-                          name:
-                            type: string
-                            example: Chicken Burger
-                          image:
-                            type: string
-                            example: ../images/chicken-burger.png
-                          unitPrice:
-                            type: number
-                            format: float
-                            example: "3.5"
-                          currency:
-                            type: string
-                            format: iso-4217
-                            example: USD
-                          quantity:
-                            type: integer
-                            format: int64
-                            example: "10"
-                          isAvailable:
-                            type: boolean
-                            example: true
-                          notes:
-                            type: string
-                            example: With Cheese
+                $ref: "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/Model-4/1-0-2/#/components/SCHEMAS/CreateInventoryItemResource"
         "403":
           description: Forbidden (No access rights to the content)
           content: {}
@@ -1001,25 +162,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  carrierCode:
-                    type: string
-                    description: Carrier Code
-                    example: CV
-                  number:
-                    type: string
-                    description: Flight Number
-                    example: "7721"
-                  date:
-                    type: string
-                    description: Date of the Flight
-                    format: date
-                    example: 2010-10-10
-                  flightReference:
-                    type: string
-                    description: Reference of the flight
-                    example: CV/7721
+                $ref: "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/CD/v1/#/components/SCHEMAS/TransportMeans"
     put:
       tags:
         - flight-schedule-alert-controller
@@ -1048,52 +191,13 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  code:
-                    type: string
-                    description: Special handling code.
-                    example: AVI
-                  name:
-                    type: string
-                    description: Special handling name.
-                    example: Live animals
+                $ref: "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/CD/v1/#/components/SCHEMAS/SpecialHandlingDetails"
         "401":
           description: Unauthorized (Authentication not done)
           content:
             application/json:
               schema:
-                type: object
-                required:
-                  - itemList
-                properties:
-                  itemList:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        menuId:
-                          type: string
-                          format: uuid
-                          example: da8249e2-49ab-4060-bb5e-ca7c66f279ac
-                        itemId:
-                          type: string
-                          format: uuid
-                          example: e2b0a51e-262e-11ee-be56-0242ac120002
-                        count:
-                          type: integer
-                          format: int64
-                          example: "2"
-                        notes:
-                          type: string
-                          example: Need to be more spicy
-                  userId:
-                    type: string
-                    format: uuid
-                    example: l2b0a7f8-262e-11ee-be56-0242ac120002
-                  notes:
-                    type: string
-                    example: Need to be more spicy
+                $ref: "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/Model-4/1-0-2/#/components/SCHEMAS/OrderBaseResource"
         "403":
           description: Forbidden (No access rights to the content)
           content: {}
@@ -1105,79 +209,13 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - type: object
-                    properties:
-                      id:
-                        type: string
-                        format: uuid
-                        example: 189e6756-1a68-11ee-be56-0242ac120002
-                  - type: object
-                    properties:
-                      minQuantity:
-                        type: integer
-                        format: int64
-                        example: "10"
-                    allOf:
-                      - required:
-                          - name
-                          - quantity
-                        type: object
-                        properties:
-                          name:
-                            type: string
-                            example: Chicken Burger
-                          image:
-                            type: string
-                            example: ../images/chicken-burger.png
-                          unitPrice:
-                            type: number
-                            format: float
-                            example: "3.5"
-                          currency:
-                            type: string
-                            format: iso-4217
-                            example: USD
-                          quantity:
-                            type: integer
-                            format: int64
-                            example: "10"
-                          isAvailable:
-                            type: boolean
-                            example: true
-                          notes:
-                            type: string
-                            example: With Cheese
+                $ref: "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/Model-4/1-0-2/#/components/SCHEMAS/InventoryItemResource"
         "429":
           description: Too Many Requests
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  userIdList:
-                    type: array
-                    items:
-                      type: string
-                      format: uuid
-                      example: l2b0a7f8-262e-11ee-be56-0242ac120002
-                allOf:
-                  - type: object
-                    required:
-                      - message
-                    properties:
-                      message:
-                        type: string
-                        example: Your order is ready
-                      effectFrom:
-                        type: string
-                        format: date-time
-                        example: 2023/04/18
-                      effectiveDates:
-                        type: integer
-                        format: int64
-                        example: "5"
+                $ref: "https://qa.xapihub.io/models/QA-Tet-Management/QA-Tet-Management-Catalog/Org-catalog-APIs/Model-Org/1-0-1/#/components/SCHEMAS/CreateNotificationResource"
 components:
   schemas:
     FlightAlert:
