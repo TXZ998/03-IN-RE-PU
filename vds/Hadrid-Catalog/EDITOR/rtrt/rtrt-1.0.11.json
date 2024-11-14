@@ -1,0 +1,1064 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "OpenAPI 3.1 Specification for CoffeeShop",
+    "summary": "Sample Coffee Shop Server based on the OpenAPI 3.1 specification.",
+    "description": "This is a sample Coffee Shop Server based on the OpenAPI 3.1 specification. It's the first version and includes several areas, such as 'Menu', 'Order', 'User', 'Inventory', 'Notification', and more. We plan to add more features in the future. Please refer to this sample and help us improve it. If you want to learn more about OpenAPI, you can follow the link to XapiiHub [https://xapihub.io/].",
+    "termsOfService": "http://xapihub.io/terms/",
+    "contact": {
+      "email": "test@xapihub.io"
+    },
+    "license": {
+      "name": "Apache 2.0q",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.11"
+  },
+  "externalDocs": {
+    "description": "Find out more about XApi",
+    "url": "http://xapihub.io"
+  },
+  "security": [
+    {
+      "api_key": []
+    }
+  ],
+  "servers": [
+    {
+      "url": "http://dev.xapihub.io/"
+    },
+    {
+      "url": "/api/v1",
+      "variables": {
+        "port": {
+          "enum": [
+            "8443",
+            "443"
+          ],
+          "default": "8443"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/menus": {
+      "post": {
+        "tags": [
+          "menu"
+        ],
+        "summary": "Add a new menu to the shop",
+        "description": "Add a new menu to the shop",
+        "operationId": "addMenu",
+        "requestBody": {
+          "description": "Create a new menu in the shop",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "today special"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "image": {
+                    "type": "string",
+                    "example": "../resource/image/image1.jpeg"
+                  },
+                  "price": {
+                    "type": "string",
+                    "example": "20.50"
+                  },
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Item"
+                    }
+                  }
+                },
+                "additionalProperties": {
+                  "street": {
+                    "type": "string",
+                    "example": "437 Lytton"
+                  },
+                  "city": {
+                    "type": "string",
+                    "example": "Palo Alto"
+                  },
+                  "state": {
+                    "type": "string",
+                    "example": "CA"
+                  },
+                  "zip": {
+                    "type": "string",
+                    "example": "94301"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "today special"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "image": {
+                      "type": "string",
+                      "example": "../resource/image/image1.jpeg"
+                    },
+                    "price": {
+                      "type": "string",
+                      "example": "20.50"
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Item"
+                      }
+                    }
+                  },
+                  "additionalProperties": {
+                    "street": {
+                      "type": "string",
+                      "example": "437 Lytton"
+                    },
+                    "city": {
+                      "type": "string",
+                      "example": "Palo Alto"
+                    },
+                    "state": {
+                      "type": "string",
+                      "example": "CA"
+                    },
+                    "zip": {
+                      "type": "string",
+                      "example": "94301"
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {
+              "location": {
+                "description": "URL of created resource",
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "menu"
+        ],
+        "summary": "Finds all menus",
+        "description": "find all menus",
+        "operationId": "findMenus",
+        "parameters": [
+          {
+            "name": "menuName",
+            "in": "query",
+            "description": "Name of the menu",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "itemName",
+            "in": "query",
+            "description": "Name of an item",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 1
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "card payment"
+                    },
+                    "amount": {
+                      "type": "number",
+                      "example": "400.0"
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "payment status",
+                      "enum": [
+                        "pending",
+                        "success",
+                        "failed",
+                        "cancel"
+                      ]
+                    }
+                  },
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (authentication not done)",
+            "content": {}
+          },
+          "403": {
+            "description": "Forbidden (no access rights to this api)",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/menus/{id}": {
+      "get": {
+        "tags": [
+          "menu"
+        ],
+        "summary": "Find menu by ID",
+        "description": "Returns a single menu",
+        "operationId": "getMenuById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of menu to return",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Menu"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Menu"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (authentication not done)",
+            "content": {}
+          },
+          "403": {
+            "description": "Forbidden (no access rights to this api)",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "menu"
+        ],
+        "summary": "Updates a menu",
+        "description": "Update a added menu in coffee shop",
+        "operationId": "updateMenuById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of menu that need to be updated",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "integer",
+                "maximum": 34,
+                "minimum": 12
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "No Content (Successful)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (authentication not done)",
+            "content": {}
+          },
+          "403": {
+            "description": "Forbidden (no access rights to this api)",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          },
+          "422": {
+            "description": "Unprocessable Entity (request well-formed but has business errors, check error section.)",
+            "content": {}
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "menu"
+        ],
+        "summary": "Deletes a menu",
+        "description": "delete a menu from the shop",
+        "operationId": "deleteMenuById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Menu id to delete",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content (Successful)",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized (authentication not done)",
+            "content": {}
+          },
+          "403": {
+            "description": "Forbidden (no access rights to this api)",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/user/login": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Logs user into the system",
+        "description": "",
+        "operationId": "loginUser",
+        "parameters": [
+          {
+            "name": "password",
+            "in": "query",
+            "description": "The user name for login",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "The password for login in clear text",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "secret",
+            "in": "path",
+            "description": "The password for login in clear text",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "The password for login in clear text",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api_key",
+            "in": "query",
+            "description": "The password for login in clear text",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api_key",
+            "in": "path",
+            "description": "The password for login in clear text",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api_key",
+            "in": "header",
+            "description": "The password for login in clear text",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "headers": {
+              "X-Rate-Limit": {
+                "description": "calls per hour allowed by the user",
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "X-Expires-After": {
+                "description": "date in UTC when token expires",
+                "schema": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            },
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid username/password supplied"
+          }
+        }
+      }
+    },
+    "/user/logout": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Logs out current logged in user session",
+        "description": "",
+        "operationId": "logoutUser",
+        "parameters": [],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Int": {
+        "type": "integer"
+      },
+      "Menu": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "example": "todya special"
+          },
+          "description": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string",
+            "example": "../resource/image/image1.jpeg"
+          },
+          "price": {
+            "type": "string",
+            "example": "20.50"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Item"
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "MenuParameterUpdate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "today special"
+          },
+          "description": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string",
+            "example": "../resource/image/image1.jpeg"
+          },
+          "price": {
+            "type": "string",
+            "example": "20.50"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Item"
+            }
+          }
+        },
+        "additionalProperties": {
+          "street": {
+            "type": "string",
+            "example": "437 Lytton"
+          },
+          "city": {
+            "type": "string",
+            "example": "Palo Alto"
+          },
+          "state": {
+            "type": "string",
+            "example": "CA"
+          },
+          "zip": {
+            "type": "string",
+            "example": "94301"
+          }
+        }
+      },
+      "Order": {
+        "required": [
+          "menu"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 10
+          },
+          "menu": {
+            "type": "object",
+            "$ref": "#/components/schemas/Menu"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Item"
+            }
+          },
+          "createdDateTime": {
+            "type": "string",
+            "description": "Order place date time",
+            "example": "2023.04.17"
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "Order place person"
+          }
+        }
+      },
+      "UpdateOrder": {
+        "required": [
+          "menu"
+        ],
+        "type": "object",
+        "properties": {
+          "menu": {
+            "type": "object",
+            "$ref": "#/components/schemas/Menu"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Item"
+            }
+          },
+          "createdDateTime": {
+            "type": "string",
+            "description": "Order place date time",
+            "example": "2023.04.17"
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "Order place person"
+          }
+        }
+      },
+      "Item": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": "12345"
+          },
+          "name": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int64",
+            "example": "10"
+          }
+        }
+      },
+      "UpdateItem": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int64",
+            "example": "10"
+          }
+        }
+      },
+      "Inventory": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Item"
+            }
+          },
+          "min_quantity": {
+            "type": "string"
+          }
+        }
+      },
+      "Address": {
+        "type": "object",
+        "properties": {
+          "street": {
+            "type": "string",
+            "example": "437 Lytton"
+          },
+          "city": {
+            "type": "string",
+            "example": "Palo Alto"
+          },
+          "state": {
+            "type": "string",
+            "example": "CA"
+          },
+          "zip": {
+            "type": "string",
+            "example": "94301"
+          }
+        },
+        "xml": {
+          "name": "address"
+        }
+      },
+      "Payment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          },
+          "method": {
+            "type": "string",
+            "example": "card payment"
+          },
+          "amount": {
+            "type": "number",
+            "example": "400.0"
+          },
+          "status": {
+            "type": "string",
+            "description": "payment status",
+            "enum": [
+              "pending",
+              "success",
+              "failed",
+              "cancel"
+            ]
+          }
+        }
+      },
+      "Notification": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 10
+          },
+          "userlist": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          },
+          "message": {
+            "type": "string"
+          },
+          "effectfrom": {
+            "type": "object",
+            "sample": "2023/04/18"
+          },
+          "effectivedates": {
+            "type": "integer",
+            "format": "int64",
+            "example": 5
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 10
+          },
+          "username": {
+            "type": "string",
+            "example": "theUser"
+          },
+          "firstName": {
+            "type": "string",
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "James"
+          },
+          "email": {
+            "type": "string",
+            "example": "john@email.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "12345"
+          },
+          "phone": {
+            "type": "string",
+            "example": "12345"
+          },
+          "userStatus": {
+            "type": "integer",
+            "description": "User Status",
+            "format": "int32",
+            "example": 1
+          }
+        },
+        "xml": {
+          "name": "user"
+        }
+      },
+      "Stores": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Store"
+        }
+      },
+      "Store": {
+        "required": [
+          "name",
+          "menu",
+          "location",
+          "openHours"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 10
+          },
+          "name": {
+            "type": "string",
+            "description": "coffee shop name",
+            "example": "The Family Bean"
+          },
+          "Address": {
+            "type": "object",
+            "$ref": "#/components/schemas/Address",
+            "description": "Coffee shop address"
+          },
+          "menu": {
+            "type": "object",
+            "$ref": "#/components/schemas/Menu",
+            "description": "Avalable menu of the shop"
+          },
+          "location": {
+            "type": "string",
+            "description": "Location url from a map api"
+          },
+          "openHours": {
+            "type": "string",
+            "description": "shop open hours",
+            "example": "open-close 10.30pm"
+          }
+        }
+      },
+      "UpdateStore": {
+        "required": [
+          "name",
+          "menu",
+          "location",
+          "openHours"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "coffee shop name",
+            "example": "The Family Bean"
+          },
+          "Address": {
+            "type": "object",
+            "$ref": "#/components/schemas/Address",
+            "description": "Coffee shop address"
+          },
+          "menu": {
+            "type": "object",
+            "$ref": "#/components/schemas/Menu",
+            "description": "Avalable menu of the shop"
+          },
+          "location": {
+            "type": "string",
+            "description": "Location url from a map api"
+          },
+          "openHours": {
+            "type": "string",
+            "description": "shop open hours",
+            "example": "open-close 10.30pm"
+          }
+        },
+        "ApiResponse": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "type": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "xml": {
+            "name": "##default"
+          }
+        }
+      },
+      "LoyalityProgram": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": 1230
+          },
+          "status": {
+            "type": "string",
+            "description": "Whether the programm currently active",
+            "enum": [
+              "active",
+              "inactive"
+            ]
+          },
+          "expirationDuration": {
+            "type": "string",
+            "description": "The number of months before points expire. Example for 10 days, 10 hours, 30 minutes, and 30 seconds:P20DT10H30M30S",
+            "example": "P20DT10H30M30S"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "basicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      },
+      "basicAuth1": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "basicAuth2": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "wed"
+      },
+      "basicAuth0": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "RFC8725 added"
+      },
+      "basicAuth3": {
+        "type": "http",
+        "scheme": "oauth"
+      },
+      "basicAuth4": {
+        "type": "http",
+        "scheme": "negotiate"
+      },
+      "basicAuth5": {
+        "type": "http",
+        "scheme": "NTLM"
+      },
+      "IdConnect": {
+        "type": "openIdConnect",
+        "openIdConnectUrl": "https://example.com/.well-known/openid-configuration"
+      },
+      "petstore_auth": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "https://petstore3.swagger.io/oauth/authorize",
+            "refreshUrl": "https://petstore3.swagger.io/oauth/authorize",
+            "scopes": {
+              "write:pets": "modify pets in your account",
+              "read:pets": "read your pets"
+            }
+          },
+          "password": {
+            "tokenUrl": "https://petstore3.swagger.io/oauth/authorize",
+            "refreshUrl": "https://petstore3.swagger.io/oauth/authorize",
+            "scopes": {
+              "write:pets": "modify pets in your account",
+              "read:pets": "read your pets"
+            }
+          },
+          "clientCredentials": {
+            "tokenUrl": "https://petstore3.swagger.io/oauth/authorize",
+            "refreshUrl": "https://petstore3.swagger.io/oauth/authorize",
+            "scopes": {
+              "write:pets": "modify pets in your account",
+              "read:pets": "read your pets"
+            }
+          },
+          "authorizationCode": {
+            "authorizationUrl": "https://petstore3.swagger.io/oauth/authorize",
+            "tokenUrl": "https://petstore3.swagger.io/oauth/authorize",
+            "refreshUrl": "https://petstore3.swagger.io/oauth/authorize",
+            "scopes": {
+              "write:pets": "modify pets in your account",
+              "read:pets": "read your pets"
+            }
+          }
+        }
+      },
+      "folderstore_auth": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "http://folderstore.swagger.io/oauth/dialog",
+            "scopes": {
+              "write:folders": "modify folders in your account",
+              "read:folders": "read your folders"
+            }
+          }
+        }
+      },
+      "api_key": {
+        "type": "apiKey",
+        "name": "api_key",
+        "in": "header"
+      },
+      "api_key2": {
+        "type": "apiKey",
+        "name": "api_key2",
+        "in": "path"
+      },
+      "api_key3": {
+        "type": "apiKey",
+        "name": "api_key2",
+        "in": "query"
+      },
+      "api_key4": {
+        "type": "apiKey",
+        "name": "api_key2",
+        "in": "cookie"
+      }
+    }
+  }
+}
