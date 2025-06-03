@@ -1,0 +1,619 @@
+openapi: 3.1.0
+
+#######################
+# Optional info section
+#######################
+info:
+  title: Cargospot Components
+  description: Common components for Cargospot REST APIs
+  version: 'v1'
+
+components:
+  ####################
+  # Common data models
+  ####################
+  schemas:
+
+    Agent:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'Unique Cargospot internal ID the agent/shipper/consignee.'
+          example: '81470000009'
+          
+        accountNumber:
+          type: string
+          description: 'Unique identifier for the agent/shipper/consignee.'
+          example: "81470000009"
+          
+        name:
+          type: string
+          description: 'Name of the participant.'
+          example: 'CSP Freight Forwarders'
+          
+        additionalName:
+          type: string
+          description: 'Additional name information for the participant.'
+          example: 'CHAMP Cargosystems'
+
+        shortName:
+          type: string
+          description: 'Abbreviation to quickly identify the participant. Alphanumeric code with 3-5 characters.'
+          example: 'CSP01'
+
+        clientType:
+          type: array
+          items:
+            type: string
+            enum:
+              - AGENT
+              - SHIPPER
+              - CONSIGNEE
+              - NOTIFIER
+              - STATION
+          description: 'Client type. This is an array with the following possible values which are comma separated - Agent,Shipper,Consignee,Notifier,Station.'
+          example: 'Agent' 
+
+        type:
+          type: string
+          enum:
+            - AGT
+            - SHP
+            - CNE
+            - AIR
+            - APT
+            - BRK
+            - CAG
+            - CTM
+            - DEC
+            - FFW
+            - GHA
+            - PTT
+            - TRK
+            - AMP
+            - AMF
+            - AMA
+          description: 'Participant type. This is an official IATA code that can be used to differentiate between participants. AGT - Agent, AIR - Airline, APT - Airport Authority, BRK - Broker, CNE - Consignee, CAG - Commissionable Agent, CTM - Customs, DEC - Deconsolidator, FFW - Freight Forwarder, GHA - Ground Handling Agent, PTT - Post Office, SHP- Shipper, TRK - Trucker. For Mail users the codes AMP, AMF and AMA can be used. AMP - Postal Authority, AMF - Mail Forwarder, AMA - Airline.'
+          example: 'AGT'
+
+        hierarchyType:
+          type: string
+          enum:
+           - Master
+           - Regional
+           - Global
+           - Local
+          description: 'Participant hierarchy type indicator. Default value is local.'
+          example: 'Master'
+          
+        branchCode:
+          type: string
+          description: 'Short name of the place where the agent branch is located.'
+          example: 'SIN'          
+
+        salesAreaCode:
+          type: string
+          description: 'Sales area to which the participant belongs to.'
+          example: 'SIN'
+
+        status:
+          type: string
+          enum:
+            - Active
+            - Old Code
+            - Black List
+            - Out of Business
+            - Inactive
+            - No Invoice
+            - Invoice
+            - Cash
+            - Debit Note
+            - Shipper Inv
+            - Tech Stores
+          description: 'Indicates the current status of the participant. This   may be used as an indicator for the restriction in the usage of the participant. Old code indicates that the participant cannot be used anymore. Black list indicates that business with the participant is already terminated. Out of business indicates that the participant is not in business anymore. Inactive. No invoice indicates that there is no invoice for this participant. Invoice indicates that the invoice of the participant will be used for general invoices. Cash indicates that the participant must pay cash. Debit note indicates that the client will be billed at the end of the month (forwarder version only). Shipper Inv indicates that any payment entered in the payment screen will be linked with the shipper shown in the AWB instead of the agent. Tech Stores.'
+          example: 'Active'
+
+        stockholder:
+          type: boolean
+          description: 'Indicates whether the participant holds stock or not. True indicates that the participant holds stock.'
+          example: true
+
+        agentGroups:
+          type: array
+          description: 'BSA agents of this participant. This will be applicable for specific airline instances.'
+          items:
+            $ref: '#/components/schemas/AgentGroup'
+    AgentGroup:
+      type: object
+      properties:
+        shortName:
+          type: string
+          description: 'Shortname of agent.'
+          example: 'BSA01'
+        type:
+          type: string
+          description: 'Type of agent.'
+          example: 'B'
+    AmountCharges:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: float
+          description: 'The amount in the specified unit.'
+          example: 1205.5
+          
+        currency:
+          $ref: '#/components/schemas/Currency'
+          
+    AutoConfirmFFRVolumeWithUnit:
+      type: object
+      properties:
+        amount:
+          type: number
+          description: A booking made by means of the C-IMP Booking Message (FFR) or Cargospot Booking API will get an automatic confirmation with status HK, KK, CA in case the volume is not exceeding the volume limitation entered in this field.
+          format: float
+          example: 1
+        unit:
+          type: string
+          description: Volume unit. MC indicates cubic metre.
+          example: MC
+          enum:
+          - MC  
+  
+    AutoConfirmFFRWeightWithUnit:
+      type: object
+      properties:
+        amount:
+          type: number
+          description: A booking made by means of the C-IMP Booking Message (FFR) or Cargospot Booking API will get an automatic confirmation with status HK, KK, CA in case the weight is not exceeding the weight limitation entered in this field.
+          format: float
+          example: 100
+        unit:
+          type: string
+          description: Weight unit. KG indicates Kilogram.
+          example: KG
+          enum:
+          - KG 
+    
+    AutoConfirmVolumeWithUnit:
+      type: object
+      properties:
+        amount:
+          type: number
+          description: Maximum volume for which any booking (in free sale) will receive an automatic confirmation (status KK).
+          format: float
+          example: 1
+        unit:
+          type: string
+          description: Volume unit. MC indicates cubic metre.
+          example: MC
+          enum:
+          - MC
+
+    AutoConfirmWeightWithUnit:
+      type: object
+      properties:
+        amount:
+          type: number
+          description: Maximum weight for which any booking (in free sale) will receive an automatic confirmation (status KK).
+          format: float
+          example: 100
+        unit:
+          type: string
+          description: Weight unit. KG indicates Kilogram.
+          example: KG
+          enum:
+          - KG         
+
+    Carrier:
+      type: object
+      properties:
+        code:
+          type: string
+          description: 'ICAO airline designator, coded identification for a carrier.'
+          example: 'XS'
+        
+        name:
+          type: string
+          description: 'Name of the airline.'
+          example: 'Champ Airlines'
+          
+    ChargeableWeight:
+      type: object
+      properties:
+        amount:
+          type: number
+          description: 'Chargeable weight. Cargospot will auto calculate if the value is not provided.'
+          format: float
+          example: 3000
+        unit:
+          type: string
+          description: 'Weight unit. KG indicates Kilogram; LB indicates Pound.'
+          example: KG
+          enum:
+          - KG
+          - LB
+    
+    Currency:
+      type: object
+      properties:
+        code:
+          type: string
+          description: 'Currency code.'
+          example: 'SGD'
+          
+        name:
+          type: string
+          description: 'Currency name.'
+          example: 'Singapore Dollar'   
+          
+    CustomsResource:
+      description: 'Optional customs status associated with this shipment. The customs information will be added to the response if the "fields" query parameter contains the value "customs"'
+      type: object
+      properties:
+        consolidatedStatusColor:
+          type: integer
+          description: 'A computed value that aggregates the status of airwaybill, master and house. The value corresponds to a color code in Cargospot. It indirectly gives the level of severity of the shipment status.'
+          example: -256
+        notifications:
+          type: array
+          description: 'The list of customs notifications received for the shipment.'
+          items: 
+            $ref: '#/components/schemas/CustomsNotification'
+    
+    CustomsNotification:
+      description: 'Customs notifications received from TGC'
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'Unique Cargospot internal ID for the notification'
+          example: '54897541'
+        flight:
+          $ref: '#/components/schemas/CustomsFlight'
+        status:
+          type: string
+          description: 'Customs status'
+          example: 'Entry Accepted'
+        code:
+          type: string
+          description: 'Customs action code'
+          example: '000'
+        description:
+          type: string
+          description: 'Customs action description'
+          example: 'PH-Physical Inspection'
+        date:
+          type: string
+          description: 'Date of the notification. Format DDMMM'
+          example: '16JUL'
+        time:
+          type: string
+          description: 'Time of the notification. Format HHmm'
+          example: '1652'
+        entryNumber:
+          type: string
+          description: 'The customs entry reference number.'
+          example: '14PL443020P0020546'
+        pieces:
+          type: string
+          description: 'The amount of pieces this notification is about.'
+          example: '3'
+        timestamp:
+          type: string
+          description: 'A timestamp for the notification. Format YYYYMMDD/HHmm'
+          example: '20211227/1345'
+    
+    CustomsFlight:
+      type: object
+      description: 'Flight information'
+      properties:
+        originAirportCode:
+          type: string
+          description: 'Flight origin airport code'
+          example: 'SIN'
+          
+        destinationAirportCode:
+          type: string
+          description: 'Flight destination airport code'
+          example: 'JFK'    
+
+        carrierCode:
+          type: string
+          description: 'Coded identification approved by IATA for a carrier, linked to the transport means (flight/truck).'
+          example: 'XS'        
+
+        number:
+          type: string
+          description: 'Reference number for this transport (e.g. flight number). Format: nnn(n)(a). This is optional only for UXR.'
+          example: '4812'
+
+        date:
+          type: string
+          format: date
+          description: 'Reference date for this transport. Format: DDMMM.'
+          example: '06SEP'
+
+    CustomsOriginCode:
+      type: string
+      description: 'Customs origin code required for customs. Possible values are C - Goods in free circulation, T1 - Goods from outside the EU under customs control, T2 - EU goods not in free circulation (e.g. Tobacco, Spirit etc.), T2F - Goods originated from the Spanish isles, TD - Goods already under formal transit procedure  (e.g. T1, TIR, Carnet, ATA Carnet, NATO Form 2, etc.), TF- TF, X - Goods originated from the EU, destined for outside the EU but leaving EU from another EU country, DE - Domestic.'
+      examples: 
+      - 'C'
+          
+    CustomsSecurityNotification:
+      description: 'Customs security notifications received from TGS'
+      type: object
+      properties:
+        id:
+          type: number
+          description: 'Unique Cargospot internal ID for the notification'
+          example: 54897541
+        destinationCountryCode:
+          type: string
+          description: 'Iata code of the destination country'
+          example: 'LU'
+        destinationType:
+          type: string
+          description: '"Transit" is used for transit, "Destination" is used for destination'
+          example: 'Destination'
+          enum:
+            - "Transit"
+            - "Destination"
+        statusCode:
+          $ref: '#/components/schemas/CustomsSecurityStatusCode'
+        description:
+          type: string
+          description: 'Customs security notification description'
+          example: 'PH-Physical Inspection'
+
+    CustomsSecurityNotifications:
+      description: 'Optional customs security (tgs) notifications associated with this shipment. The customs security information will be added to the response if the "fields" query parameter contains the value "customsSecurityNotifications". The list of customs security notifications received for the shipment.'
+      type: array
+      items: 
+        $ref: '#/components/schemas/CustomsSecurityNotification'
+
+    CustomsSecurityStatusCode:
+      description: 'TGS status code'
+      type: "string"
+      examples: 
+      - "NOT"
+      enum:
+        - ""
+        - "NOT"
+        - "WAT"
+        - "HLD"
+        - "ERR"
+        - "REL"
+        - "DNL"
+        - "EXC"
+        
+    Location:
+      type: object
+      properties:
+        code:
+          type: string
+          description: 3-letter-IATA code of the location.
+          example: MAN
+        name:
+          type: string
+          description: Full name of the location.
+          example: Manchester
+        type:
+          type: string
+          description: Indicates if airport or city.
+          example: Airport
+        timeArea:
+          type: string
+          description: This is the UTC offset for this airport/city as on the date/time.
+          example: Europe/London
+
+    LocationCodeType:
+      type: object
+      properties:
+        code:
+          type: string
+          description: 3-letter-IATA code of the location.
+          example: MAN
+        type:
+          type: string
+          description: Indicates if airport or city.
+          example: Airport
+
+    MailWeightWithUnit:
+      type: object
+      properties:
+        amount:
+          type: number
+          description: Weight.
+          format: float
+          example: 1000
+        unit:
+          type: string
+          description: Weight unit. KG indicates Kilogram.
+          example: KG
+          enum:
+          - KG
+
+    OverBookingVolumeWithUnit:
+      type: object
+      properties:
+        amount:
+          type: number
+          description: Maximum volume for a booking that will receive an automatic confirmation (status HK,KK, CA) in case of overbooking. Overbooking = Booking made over the available weight & volume. 
+          format: float
+          example: 1
+        unit:
+          type: string
+          description: Volume unit. MC indicates cubic metre.
+          example: MC
+          enum:
+          - MC
+
+    OverBookingWeightWithUnit:
+      type: object
+      properties:
+        amount:
+          type: number
+          description: Maximum weight for a booking that will receive an automatic confirmation (status HK, KK, CA) in case of overbooking. Overbooking = Booking made over the available weight & volume. 
+          format: float
+          example: 100
+        unit:
+          type: string
+          description: Weight unit. KG indicates Kilogram.
+          example: KG
+          enum:
+          - KG 
+
+    ServiceType:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Service type code.
+          example: T
+        name:
+          type: string
+          description: Service type name.
+          example: Truck
+
+    Status:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Status code.
+          example: OK
+        description:
+          type: string
+          description: Status description.
+          example: Acceptance cut-off not exceeded
+
+    SalesArea:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'Unique Cargospot internal ID.'
+          example: 'SIN001'
+        code:
+          type: string
+          description: 'Sales area Code'
+          example: 'SIN'
+        countryCode:
+          type: string
+          description: 'Sales area country Code'
+          example: 'SG'
+        name:
+          type: string
+          description: 'Sales area Name'
+          example: 'Bangalore'
+          
+    TransportMeansBookingConfiguration:
+      type: object
+      properties:
+        autoConfirm:
+          type: boolean
+          description: Allows users without specific duty codes (privilege) to confirm bookings on this flight in Cargospot.
+          example: true
+        autoConfirmFFRVolume:
+          $ref: '#/components/schemas/AutoConfirmFFRVolumeWithUnit'         
+        autoConfirmFFRWeight:
+          $ref: '#/components/schemas/AutoConfirmFFRWeightWithUnit'         
+        autoConfirmVolume:
+          $ref: '#/components/schemas/AutoConfirmVolumeWithUnit'          
+        autoConfirmWeight:
+          $ref: '#/components/schemas/AutoConfirmWeightWithUnit'         
+        maximumFFRPercentage:
+          type: number   
+          description: Maximum percentage allowed for overbooking in case of bookings received via C-IMP Booking Message (FFR) or Cargospot Booking API. Any booking made between 100 percent and the percentage entered in this field will be handled according to the weight and volume limitations set in the FFR Weight & Volume (autoConfirmFFRWeight & autoConfirmFFRVolume) fields.
+          example: 7
+        maximumSalePercentage:
+          type: number     
+          description: Maximum percentage allowed for overbooking in case of bookings made via Cargospot. Any booking made between 100 percent and the percentage entered in this field will be handled according to the weight and volume limitations set in the overbooking weight & volume (overbookingWeight & overbookingVolume) fields.
+          example: 6
+        overbookingVolume:
+          $ref: '#/components/schemas/OverBookingVolumeWithUnit'
+        overbookingWeight:
+          $ref: '#/components/schemas/OverBookingWeightWithUnit'  
+
+    Volume:
+      type: object
+      required: 
+        - amount
+        - unit
+      properties:
+        amount:
+          type: number
+          description: Volume.
+          format: float
+          example: 24
+        unit:
+          type: string
+          description: Volume unit. MC indicates cubic metre.
+          example: MC
+          enum:
+          - MC
+    
+    VolumeWithUnit:
+      type: object
+      properties:
+        amount:
+          type: number
+          description: Volume.
+          format: float
+          example: 24
+        unit:
+          type: string
+          description: Volume unit. MC indicates cubic metre.
+          example: MC
+          enum:
+          - MC     
+    
+    Weight:
+      type: object
+      required: 
+        - amount
+        - unit      
+      properties:
+        amount:
+          type: number
+          description: Weight.
+          format: float
+          example: 3000
+        unit:
+          type: string
+          description: Weight unit. KG indicates Kilogram.
+          example: KG
+          enum:
+          - KG
+          
+    WeightWithUnit:
+      type: object
+      properties:
+        amount:
+          type: number
+          description: Weight.
+          format: float
+          example: 3000
+        unit:
+          type: string
+          description: Weight unit. KG indicates Kilogram.
+          example: KG
+          enum:
+          - KG          
+  ####################
+  # Common parameters
+  ####################
+  parameters:
+    if-match:
+      name: If-Match
+      in: header
+      description: 'Makes the request conditional. Helps to prevent the lost update problem by ensuring that your request will not override another change done since the original resource was retrieved. In this parameter, specify the Etag returned in the header of the GET by {id} method for this resource. HTTP 412 response will be returned if the Etag value is not valid.'
+      required: true
+      schema:
+        type: string
+  #######################
+  # Common request bodies
+  #######################
